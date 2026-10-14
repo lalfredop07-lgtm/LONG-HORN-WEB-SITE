@@ -1,0 +1,45 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# production
+/build
+
+# testing
+/coverage
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/
+
+# misc
+.DS_Store
+*.pem
+*.tsbuildinfo
+
+# local env files — NUNCA subir secretos
+.env
+.env*.local
+.env.production
+
+# vercel
+.vercel
+
+# editor
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# OS
+Thumbs.db
+capturas/
+
+# Originales sin comprimir de Higgsfield (copias maestras, ~11 MB).
+# Si no se quieren en Git, descomentar y guardarlos en el Drive del cliente.
+# assets-generados/
