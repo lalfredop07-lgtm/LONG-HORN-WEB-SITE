@@ -25,11 +25,6 @@ export function SeccionLocales() {
               Encuentra tu <Rojo>LongHorn.</Rojo>
             </h2>
           </div>
-          <p className="shrink-0 text-apunte uppercase tracking-[0.16em] text-lh-marfil/60 sm:text-right">
-            Misma brasa.
-            <br />
-            Distintas historias.
-          </p>
         </Revelar>
 
         <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

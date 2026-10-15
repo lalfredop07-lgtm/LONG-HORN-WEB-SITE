@@ -64,9 +64,9 @@ describe("locales", () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it("solo marca en el mapa locales con coordenadas verificadas", () => {
+  it("todos los locales publicados se pueden situar en el mapa", () => {
     const conMapa = localesConMapa();
-    expect(conMapa).toHaveLength(12);
+    expect(conMapa).toHaveLength(13);
     for (const l of conMapa) {
       expect(l.coordenadas!.lat).toBeLessThan(0); // hemisferio sur
       expect(l.coordenadas!.lng).toBeLessThan(-68); // Perú

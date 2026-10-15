@@ -3,7 +3,7 @@
 Sitio web de LongHorn Perú: carnes, parrillas y cócteles, con 13 restaurantes en
 cinco ciudades del país.
 
-Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · 31 rutas estáticas
+Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Leaflet · 31 rutas estáticas
 
 ---
 
@@ -15,9 +15,9 @@ cp .env.example .env.local      # rellenar lo que haga falta
 npm run dev                     # http://localhost:3000
 ```
 
-El sitio funciona sin ninguna variable configurada: sin clave de Google Maps el
-directorio de locales sigue completo y el mapa se sustituye por un aviso; sin
-Measurement ID no se carga analítica.
+El sitio funciona sin ninguna variable configurada. El mapa de locales usa
+Leaflet con teselas de OpenStreetMap: **no necesita clave de API ni
+facturación**. Sin Measurement ID no se carga analítica.
 
 ## Comandos
 
@@ -45,7 +45,7 @@ python3 scripts/optimizar-video.py <origen.mp4> <nombre>
 |---|---|
 | Lint · TypeScript | **0 errores** |
 | Pruebas unitarias | **16/16** |
-| Pruebas end-to-end | **79/79** |
+| Pruebas end-to-end | **85/85** |
 | Build | **31 rutas estáticas** |
 | QA visual | **90 capturas, 0 desbordes** |
 | Lighthouse escritorio | Perf **99–100** · A11y **100** · BP 96 · SEO **100** |
@@ -57,7 +57,7 @@ python3 scripts/optimizar-video.py <origen.mp4> <nombre>
 | | |
 |---|---|
 | Platos en la carta | **103**, con precio, de la carta oficial |
-| Locales | **13** (12 con coordenadas verificadas) |
+| Locales | **13**, todos situados en el mapa |
 | Experiencias | 1 («Sabores LongHorn»), en 6 locales |
 | Fotografía de platos | 10 imágenes oficiales extraídas del PDF de la carta |
 | Recursos generados | 2 vídeos + 1 imagen (Higgsfield) |
@@ -116,7 +116,7 @@ Hay pruebas automatizadas que impiden que esto se degrade con el tiempo.
 | [arquitectura.md](docs/arquitectura.md) | Stack, estructura, capa de datos, variables |
 | [carta-fuentes.md](docs/carta-fuentes.md) | Origen de la carta y cómo mantenerla |
 | [locales-verificacion.md](docs/locales-verificacion.md) | Verificación de los 13 locales |
-| [integraciones.md](docs/integraciones.md) | Google Maps, reservas, pedidos, analítica |
+| [integraciones.md](docs/integraciones.md) | Mapa (Leaflet/OSM), reservas, pedidos, analítica |
 | [higgsfield-assets.md](docs/higgsfield-assets.md) | Recursos generados, prompts y coste |
 | [seo.md](docs/seo.md) · [seo-local.md](docs/seo-local.md) | SEO técnico y local |
 | [analytics.md](docs/analytics.md) | GA4, consentimiento y eventos |
@@ -134,6 +134,5 @@ Hay pruebas automatizadas que impiden que esto se degrade con el tiempo.
 
 Ver [docs/pendientes-cliente.md](docs/pendientes-cliente.md). Lo que bloquea:
 
-1. Clave de Google Maps Platform restringida.
-2. Aprobación legal de privacidad, cookies y términos.
-3. Accesos de GitHub, Vercel y DNS.
+1. Aprobación legal de privacidad, cookies y términos.
+2. Accesos de GitHub, Vercel y DNS.

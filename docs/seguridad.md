@@ -18,12 +18,12 @@ prueba automatizada.
 
 ```
 default-src 'self'
-script-src  'self' 'unsafe-inline' https://maps.googleapis.com https://www.googletagmanager.com
+script-src  'self' 'unsafe-inline' https://www.googletagmanager.com
 style-src   'self' 'unsafe-inline' https://fonts.googleapis.com
-img-src     'self' data: blob: https://maps.googleapis.com https://maps.gstatic.com
-            https://*.googleapis.com https://*.ggpht.com https://www.google-analytics.com
+img-src     'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org
+            https://server.arcgisonline.com https://*.arcgisonline.com https://www.google-analytics.com
 font-src    'self' data: https://fonts.gstatic.com
-connect-src 'self' https://maps.googleapis.com https://www.google-analytics.com
+connect-src 'self' https://tile.openstreetmap.org https://server.arcgisonline.com https://www.google-analytics.com
             https://*.analytics.google.com https://*.googletagmanager.com
 frame-src   'self' https://www.google.com https://longhorn.mesa247.pe
 object-src  'none'
@@ -33,8 +33,8 @@ frame-ancestors 'none'
 upgrade-insecure-requests
 ```
 
-Solo se abre lo que el sitio usa de verdad: Google Maps y, si se configura,
-Google Analytics. Las fuentes se auto-alojan con `next/font`, así que no hay
+Solo se abre lo que el sitio usa de verdad: las teselas del mapa
+(OpenStreetMap y Esri) y, si se configura, Google Analytics. Las fuentes se auto-alojan con `next/font`, así que no hay
 peticiones a Google Fonts en tiempo de ejecución.
 
 ### Sobre `'unsafe-inline'` en `script-src`
@@ -73,12 +73,11 @@ lleva.
 - Las credenciales de Higgsfield viven en `~/.config/higgsfield/credentials.env`
   (fuera del proyecto) y nunca se imprimen.
 
-### La clave de Google Maps es pública
+### Sin claves de mapa
 
-Conviene no confundirse: una clave de navegador de Google Maps **viaja en el
-HTML** y es visible para cualquiera. Lo que impide su abuso no es ocultarla,
-sino **restringirla por referente HTTP y por API** en Google Cloud Console. Ese
-paso es obligatorio (ver `docs/integraciones.md`).
+El mapa de locales no usa ninguna clave de API: las teselas de OpenStreetMap
+y Esri son de acceso público. No hay nada que restringir ni que vigilar en
+una consola de facturación.
 
 ## Superficie de ataque
 
@@ -113,8 +112,6 @@ Conviene activar Dependabot o Renovate en el repositorio.
 
 ## Qué revisar antes de publicar
 
-- [ ] Clave de Google Maps restringida por referente y por API
-- [ ] Alerta de presupuesto y cuota diaria en Google Cloud
 - [ ] `NEXT_PUBLIC_INDEXABLE=true` **solo** en producción
 - [ ] HTTPS forzado (automático en Vercel)
 - [ ] Variables de entorno marcadas como «Sensitive» donde corresponda

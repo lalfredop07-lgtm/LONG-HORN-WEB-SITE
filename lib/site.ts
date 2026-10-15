@@ -13,9 +13,11 @@ export const SITE_URL = (rawUrl && rawUrl.length > 0 ? rawUrl : "http://localhos
 
 export const ES_INDEXABLE = process.env.NEXT_PUBLIC_INDEXABLE === "true";
 
-export const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim() ?? "";
-export const GOOGLE_MAPS_MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID?.trim() ?? "";
-export const HAY_MAPA = GOOGLE_MAPS_API_KEY.length > 0;
+/*
+ * El mapa de locales usa Leaflet con teselas de CARTO/OpenStreetMap y
+ * Esri: no necesita clave de API ni facturación, así que no hay ninguna
+ * variable de entorno que configurar para que funcione.
+ */
 
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() ?? "";
 export const HAY_ANALITICA = /^G-[A-Z0-9]+$/i.test(GA_MEASUREMENT_ID);

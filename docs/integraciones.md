@@ -1,68 +1,117 @@
 # Integraciones
 
-## 1. Google Maps Platform — **pendiente de clave**
+## 1. Mapa de locales (Leaflet + OpenStreetMap) — **operativo**
 
 ### Estado
 
-La implementación está **completa y escrita**, pero **no se ha podido probar
-contra la API real** porque no hay clave disponible. No se declara operativa.
+**Funciona sin ninguna clave de API y sin facturación.** Probado en
+escritorio, tablet y móvil, con pruebas automatizadas que verifican que las
+teselas cargan y que los marcadores llevan el símbolo de la marca.
 
-Lo que sí está probado: el comportamiento **sin** clave, que es el que verá
-cualquiera hasta que se configure.
+Se descartó Google Maps JavaScript API por decisión del cliente.
 
-### Cómo activarlo
+### Tecnología
 
-1. Crear un proyecto en [Google Cloud Console](https://console.cloud.google.com/).
-2. Habilitar **Maps JavaScript API**. (Places y Geocoding **no** hacen falta:
-   las coordenadas ya están en los datos.)
-3. Crear una **clave de API** del tipo «clave de navegador».
-4. **Restringirla**, que es el paso que no se puede saltar:
-   - *Restricciones de aplicación* → **Sitios web**, con los referentes:
-     ```
-     https://longhornperu.com/*
-     https://www.longhornperu.com/*
-     https://*.vercel.app/*        (solo mientras se usen previews)
-     ```
-   - *Restricciones de API* → **solo Maps JavaScript API**.
-5. Activar la facturación y poner una **alerta de presupuesto** (p. ej. 50 USD)
-   y una cuota diaria de peticiones.
-6. Añadir en Vercel la variable `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` y volver a
-   desplegar.
+| Pieza | Versión | Papel |
+|---|---|---|
+| `leaflet` | 1.9.4 | Motor del mapa |
+| `react-leaflet` | 5.0.0 | Integración con React 19 |
+| `@types/leaflet` | 1.9.22 | Tipos |
 
-> La clave de Maps es **pública por diseño**: viaja en el HTML. Lo que impide su
-> abuso es la restricción por referente, no el secreto. Por eso el paso 4 es
-> obligatorio.
+No se usa `leaflet.markercluster`: la agrupación está implementada a medida
+(≈40 líneas) para controlar el aspecto de la pastilla y evitar 30 KB de
+dependencia con estilos genéricos.
 
-### Map ID (opcional)
+> **Licencia de react-leaflet:** Hippocratic 2.1, no es OSI pero es de uso
+> gratuito y sin coste. No impone regalías ni restricciones relevantes para
+> un restaurante. Conviene que el cliente lo sepa.
 
-Con `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID` se usa un estilo gestionado desde la nube
-de Google. Sin él, se aplica el estilo LongHorn declarado en el código
-(`ESTILO_LONGHORN` en `components/locations/MapaLocales.tsx`): maderas, carbón y
-ámbar, sin puntos de interés que compitan con los restaurantes.
+### Proveedores de teselas
+
+| Vista | Proveedor | Clave | Atribución |
+|---|---|---|---|
+| **Mapa** | OpenStreetMap estándar | No | «© colaboradores de OpenStreetMap» |
+| **Satélite** | Esri World Imagery | No | «Imágenes © Esri, Maxar, Earthstar Geographics» |
+
+Ambas atribuciones se muestran siempre en el mapa, como exigen sus
+licencias.
+
+**Por qué no CARTO.** La primera implementación usaba CARTO Dark Matter por
+su estética oscura, pero sus teselas ahora llegan con la marca de agua
+«API KEY REQUIRED» impresa encima: ya no son gratuitas sin registro. Se
+cambió a OpenStreetMap.
+
+**Cómo se consigue el aspecto oscuro.** Las teselas de OpenStreetMap son
+claras. Se invierten y se corrige el tono con un filtro CSS aplicado solo al
+panel de teselas (`styles/mapa.css`), de modo que los marcadores rojos no se
+ven afectados:
+
+```css
+filter: invert(1) hue-rotate(190deg) brightness(.66) contrast(1) saturate(.22) sepia(.4);
+```
+
+> **Volumen de uso.** La política de uso de teselas de OpenStreetMap admite
+> tráfico moderado como el de este sitio, pero desaconseja usos intensivos.
+> Si la web llegara a un volumen alto, lo razonable es contratar un
+> proveedor de teselas (MapTiler, Mapbox, Stadia) y cambiar una única
+> constante en `components/locations/MapaLeaflet.tsx`.
+
+### Marcadores
+
+Los pines usan el **símbolo oficial de los cuernos** entregado por el
+cliente (`RECURSOS/MARCA DE CUERNOS.png`). No se ha redibujado: se vectorizó
+con `scripts/build-cuernos.py`, que traza el contorno real del archivo y
+genera `public/brand/cuernos-longhorn.svg` y el trazado incrustable
+`lib/cuernos-path.ts`. La comparación superpuesta confirma que encaja pixel
+a pixel con el original.
+
+Cada marcador es una gota roja con los cuernos blancos encima, con tres
+estados: normal, hover y seleccionado (más grande, rojo de marca, resplandor
+y un pulso discreto que se desactiva con `prefers-reduced-motion`).
+
+Para regenerarlos si cambia el archivo de marca:
+
+```bash
+python3 scripts/build-cuernos.py
+```
 
 ### Qué hace el mapa
 
-- Dibuja **solo** los locales con coordenadas oficiales verificadas (12 de 13).
-- Marcadores personalizados con la cabeza de toro del logotipo, en SVG, con
-  estado activo en rojo de marca.
-- Ajuste automático de encuadre a todos los marcadores.
-- **Sincronizado con el listado**: al elegir una sede en la lista el mapa centra
-  y resalta su marcador, y al tocar un marcador se selecciona en la lista.
-- `gestureHandling: "cooperative"`, para que el mapa **no secuestre el scroll**
-  de la página en móvil.
-- Se carga con `next/dynamic` y `ssr: false`: su JavaScript no se descarga en
-  ninguna otra página.
+- Dibuja **los 13 locales**; los que caen muy juntos se funden en una
+  pastilla con el número, que al pulsarla acerca a ese grupo.
+- **Sincronizado con el listado** en ambos sentidos: elegir una tarjeta
+  centra y resalta su marcador; tocar un marcador selecciona su tarjeta.
+- **Buscador** por nombre, distrito, ciudad, dirección o centro comercial,
+  insensible a tildes y mayúsculas.
+- **Filtros** por ciudad y distrito, encadenados.
+- Conmutador **Mapa / Satélite**.
+- Encuadre inicial en **Lima** (9 de 13 sedes), con un botón para ver todo
+  el país. Encuadrar el Perú entero de inicio dejaba las sedes de Lima
+  amontonadas en un punto.
+- **Gestos cooperativos**: en táctil hacen falta dos dedos para mover el
+  mapa y con ratón Ctrl + rueda para el zoom, de modo que el mapa nunca
+  secuestra el scroll de la página. Si alguien lo intenta con un dedo,
+  aparece un aviso.
 
-### Si no hay clave o Maps falla
+### Experiencia móvil
 
-El componente `MapaNoDisponible` ocupa su lugar y explica la situación sin
-fingir ser un mapa. El directorio sigue completo: filtros, direcciones,
-teléfonos, «Cómo llegar», «Ver local» y «Reservar» funcionan igual.
+- Pestañas **Lista / Mapa** bien visibles.
+- Filtros plegables tras un botón «Filtros» con contador, para que el mapa
+  no quede empujado fuera de la pantalla.
+- Al tocar un marcador aparece una ficha bajo el mapa, que además se acerca
+  sola a la vista.
+- La selección se conserva al cambiar de pestaña.
+- El umbral de agrupación se adapta al ancho: con un valor fijo, un móvil
+  acababa mostrando un único grupo con todas las sedes de Lima.
 
-Hay una prueba que lo verifica: *«sin clave de Google Maps el directorio sigue
-siendo utilizable»*.
+### Una trampa que conviene conocer
 
----
+En móvil el mapa se monta dentro de la pestaña «Lista», oculta, así que su
+contenedor mide 0 px. Encuadrarlo en ese estado produce coordenadas `NaN` y
+**Leaflet lanza `Invalid LatLng object`, que tumba el componente entero**.
+El código lo evita de dos formas: no calcula nada mientras el contenedor
+mida cero, y vuelve a encuadrar cuando un `ResizeObserver` detecta que ya
+tiene tamaño.
 
 ## 2. Reservas (mesa 24/7) — **operativo**
 

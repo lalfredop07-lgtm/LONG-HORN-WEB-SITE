@@ -41,10 +41,6 @@ export default function PaginaLocales() {
           <h1 className="max-w-3xl text-display-lg font-normal text-lh-marfil">
             Encuentra tu <Rojo>LongHorn.</Rojo>
           </h1>
-          <p className="mt-5 max-w-xl text-cuerpo-lg leading-relaxed text-lh-marfil/75">
-            Filtra por ciudad o distrito, mira el mapa y reserva directamente en la sede que te
-            quede mejor.
-          </p>
         </div>
       </section>
 

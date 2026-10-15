@@ -61,6 +61,14 @@ const REGISTROS = {
     notas:
       "Confirma el local de Mall Aventura SJL (3.er nivel, 384,11 m², 12:00–23:00) y el total de 12 locales en febrero de 2024.",
   },
+  openstreetmap: {
+    nombre: "OpenStreetMap (Nominatim) — ubicación de centros comerciales",
+    url: "https://nominatim.openstreetmap.org/",
+    consultadoEl: "2026-10-15",
+    confianza: "media",
+    notas:
+      "Datos abiertos de OpenStreetMap. Se usa únicamente para situar el edificio de un centro comercial cuando la marca no publica coordenadas propias; nunca para inventar una sucursal.",
+  },
   "logo-cliente": {
     nombre: "Logotipo oficial entregado por el cliente (LOGO.png)",
     consultadoEl: "2026-10-14",

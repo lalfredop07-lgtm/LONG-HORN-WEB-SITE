@@ -131,16 +131,9 @@ export function HeroCinematico() {
             nos <Rojo>une.</Rojo>
           </h1>
 
-          <p
-            className="mt-6 max-w-md text-cuerpo-lg leading-relaxed text-lh-marfil/80"
-            data-entrada="3"
-          >
-            Buena carne. Grandes momentos.
-          </p>
-
           <div
             className="mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4"
-            data-entrada="4"
+            data-entrada="3"
           >
             <BotonEnlace href="/carta" tamano="lg">
               Ver nuestra carta <FlechaCta />
@@ -151,18 +144,6 @@ export function HeroCinematico() {
           </div>
         </div>
       </div>
-
-      {/* Indicador de scroll */}
-      <a
-        href="#nuestra-carta"
-        className="group absolute inset-x-0 bottom-5 mx-auto hidden w-fit flex-col items-center gap-2 text-lh-marfil/60 transition-colors hover:text-lh-marfil lg:flex"
-      >
-        <span className="eyebrow text-[0.68rem]">Descubre</span>
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5 motion-safe:animate-bounce">
-          <path d="M12 4v15m0 0-6-6m6 6 6-6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        </svg>
-        <span className="solo-lectores">Ir a la sección Nuestra carta</span>
-      </a>
     </section>
   );
 }

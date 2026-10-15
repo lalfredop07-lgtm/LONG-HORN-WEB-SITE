@@ -19,8 +19,8 @@ node scripts/capturas.mjs   # QA visual: 90 capturas + auditoría de desbordes
 | ESLint | **0 errores, 0 avisos** |
 | TypeScript (`strict`) | **0 errores** |
 | Vitest (datos) | **16/16** |
-| Playwright escritorio | **41/41** |
-| Playwright móvil | **38/38** |
+| Playwright escritorio | **43/43** |
+| Playwright móvil | **42/42** |
 | Build | **31 rutas estáticas** |
 | QA visual | **90 capturas, 0 desbordes** |
 
@@ -50,13 +50,20 @@ S/ 49, Ensalada César S/ 31, Choripapa S/ 36) · las 9 secciones con sus anclas
 la navegación por categorías funciona · **bebidas no publica platos ni precios**
 · aviso legal presente · el selector de local cambia el destino de la reserva.
 
-### Locales
+### Locales y mapa
 
-Los 13 listados · filtro por ciudad · el directorio funciona sin mapa ·
-«Cómo llegar» siempre apunta a Google Maps · las 13 fichas responden 200 con sus
-datos reales · JSON-LD `Restaurant` válido **y sin `aggregateRating` ni
-`review`** · un local sin horario lo dice en vez de inventarlo · un local sin
-reserva online ofrece alternativa.
+Los 13 listados · filtro por ciudad · buscador por distrito, nombre y
+dirección · acciones presentes en cada ficha · «Cómo llegar» siempre apunta a
+Google Maps · las 13 fichas responden 200 con sus datos reales · JSON-LD
+`Restaurant` válido **y sin `aggregateRating` ni `review`** · un local sin
+horario lo dice en vez de inventarlo · un local sin reserva online ofrece
+alternativa.
+
+Del mapa Leaflet: las teselas cargan desde OpenStreetMap **sin clave de
+API** · los marcadores llevan el símbolo oficial de los cuernos, no un icono
+genérico · entre pines sueltos y grupos están representadas **las 13 sedes** ·
+elegir una sede en la lista la marca en el mapa (y en móvil lleva a la vista
+de mapa con su ficha).
 
 ### Accesibilidad
 
@@ -100,6 +107,8 @@ No son pruebas decorativas. Esto es lo que detectaron:
 | Nombre accesible | Los enlaces del menú móvil se anunciaban como «03 Carta» |
 | Auditoría de desbordes | `whitespace-nowrap` en los botones desbordaba `/experiencias` a 320 px |
 | Consola del navegador | Error de hidratación en todas las páginas por el script que marca `html.js` |
+| Flujo móvil del mapa | `Invalid LatLng object: (NaN, NaN)` tumbaba el mapa: se inicializaba dentro de la pestaña «Lista», oculta, con el contenedor a 0 px |
+| Prueba de filtros | Interactuaba antes de la hidratación: el `select` cambiaba de valor pero React aún no escuchaba |
 | Lighthouse | 42 clases de color por debajo del contraste AA |
 
 ## Limitaciones conocidas

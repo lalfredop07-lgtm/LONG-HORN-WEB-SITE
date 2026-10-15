@@ -6,19 +6,14 @@ Lo que necesitamos de LongHorn para cerrar el proyecto. Ordenado por impacto.
 
 ## 🔴 Bloquean el lanzamiento
 
-### 1. Clave de Google Maps Platform
+### 1. ~~Clave de Google Maps Platform~~ — **resuelto**
 
-**Por qué:** el mapa de `/locales` es una de las funcionalidades centrales del
-encargo. Está implementado, pero **no se ha podido probar contra la API real**.
+Ya no hace falta. El mapa se reimplementó con **Leaflet + OpenStreetMap**:
+funciona sin clave, sin facturación y sin coste. Ver `docs/integraciones.md`.
 
-**Qué hace falta:** una clave de navegador restringida por referente HTTP y
-limitada a *Maps JavaScript API*, con facturación activa. Pasos detallados en
-`docs/integraciones.md`.
-
-**Mientras tanto:** el directorio funciona completo (filtros, direcciones,
-teléfonos, «Cómo llegar», reservas) y el mapa se sustituye por un aviso honesto.
-
----
+Lo único a tener en cuenta: la política de teselas de OpenStreetMap admite
+tráfico moderado. Si el sitio creciera mucho, convendría contratar un
+proveedor de teselas; es cambiar una constante.
 
 ### 2. Aprobación de los textos legales
 
@@ -88,16 +83,15 @@ reserva. Si no, queda descartado y el recuento de 13 es correcto.
 
 ---
 
-### 7. Coordenadas de San Juan de Lurigancho
+### 7. Afinar la ubicación de San Juan de Lurigancho
 
-**Por qué:** es el único local que **no aparece en el mapa**, porque no hay
-coordenadas de fuente oficial y no se inventan.
+**Resuelto a medias.** Ya aparece en el mapa: sus coordenadas salen de
+OpenStreetMap, que sitúa el **centro comercial** Mall Aventura SJL en
+Av. Lurigancho 997 (Zárate) — la cuadra 9 que documenta Perú Retail.
 
-**Qué hace falta:** las coordenadas exactas (clic derecho en Google Maps sobre
-la entrada del local → copiar `lat, lng`). También su enlace de reserva, si lo
-tiene.
-
----
+**Qué falta:** el punto marca el edificio, no la unidad del 3.er nivel. Si
+LongHorn facilita la coordenada exacta de la entrada del restaurante, se
+sustituye en `data/locales.ts`. También sigue sin enlace de reserva online.
 
 ### 8. Fotografía de locales
 
@@ -106,10 +100,14 @@ generado ninguna con IA porque presentar un edificio inventado como un
 restaurante real sería engañar al cliente final.
 
 **Qué hace falta:** fotografías autorizadas de fachadas e interiores, a ser
-posible de los 13 locales. Con ellas, las fichas ganan mucho.
+posible de los 13 locales. Con ellas, las tarjetas y las fichas del mapa
+ganan mucho.
 
-**Mientras tanto:** composiciones tipográficas de marca, que funcionan y son
-honestas.
+**Mientras tanto:** las tarjetas usan la **fotografía gastronómica oficial**
+de LongHorn, extraída de su carta. Es material de marca auténtico y el texto
+alternativo describe el plato, nunca el local, para no dar a entender que es
+una foto del establecimiento. Basta con cambiar el campo `imagen` de cada
+local en `data/locales.ts`.
 
 ---
 

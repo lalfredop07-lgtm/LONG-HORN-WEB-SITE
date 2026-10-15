@@ -37,7 +37,7 @@ publica el sitio.
 | Piura | Verificado | Sí | Sí | Sí | — |
 | Cajamarca | Verificado | Sí | Sí | Sí | — |
 | Huancayo | Verificado* | Sí | Sí | Sí | — |
-| San Juan de Lurigancho | **Parcial** | **No** | **No** | **No** | — |
+| San Juan de Lurigancho | **Parcial** | Sí* | **No** | **No** | — |
 
 Ningún local tiene horario verificado: LongHorn no los publica.
 
@@ -55,9 +55,9 @@ Aventura SJL, 384,11 m², horario 12:00–23:00 en el momento de la apertura). N
 figura en el sistema de reservas, así que:
 
 - aparece en el directorio con su dirección,
-- **no se dibuja marcador en el mapa** (sin coordenadas oficiales),
-- su botón «Cómo llegar» abre una **búsqueda** en Google Maps por nombre y
-  dirección, no un punto concreto,
+- (*) **sí se dibuja en el mapa**, con las coordenadas del centro comercial
+  según OpenStreetMap (Av. Lurigancho 997, Zárate). Señalan el edificio, no
+  la unidad del 3.er nivel: suficiente para llegar, pendiente de afinar,
 - y su página ofrece WhatsApp como alternativa de reserva.
 
 **Chiclayo.** Sin teléfono en la fuente oficial. Su ficha lo dice y ofrece

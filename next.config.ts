@@ -18,11 +18,13 @@ const csp = [
   "default-src 'self'",
   // 'unsafe-eval' SOLO en desarrollo: React lo necesita para el refresco en
   // caliente y las trazas de error. La build de producción nunca lo lleva.
-  `script-src 'self' 'unsafe-inline'${esDesarrollo ? " 'unsafe-eval'" : ""} https://maps.googleapis.com https://www.googletagmanager.com`,
+  `script-src 'self' 'unsafe-inline'${esDesarrollo ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https://maps.googleapis.com https://maps.gstatic.com https://*.googleapis.com https://*.ggpht.com https://www.google-analytics.com",
+  // Teselas del mapa de locales: OpenStreetMap (vista «Mapa») y Esri
+  // (vista «Satélite»). Ambas gratuitas y sin clave; ver docs/integraciones.md.
+  "img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://server.arcgisonline.com https://*.arcgisonline.com https://www.google-analytics.com",
   "font-src 'self' data: https://fonts.gstatic.com",
-  "connect-src 'self' https://maps.googleapis.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
+  "connect-src 'self' https://tile.openstreetmap.org https://server.arcgisonline.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
   "frame-src 'self' https://www.google.com https://longhorn.mesa247.pe",
   "object-src 'none'",
   "base-uri 'self'",

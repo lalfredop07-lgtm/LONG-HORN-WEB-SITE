@@ -10,7 +10,8 @@
 | Tailwind CSS | 4.3.3 | Tokens en CSS, sin archivo de configuración JS |
 | Zod | 4.6.7 | Validación de la capa de datos en tiempo de build |
 | GSAP | 3.15.0 | Disponible para animación avanzada (ver nota) |
-| @googlemaps/js-api-loader | 2.1.3 | Carga del mapa bajo demanda |
+| leaflet | 1.9.4 | Motor del mapa de locales |
+| react-leaflet | 5.0.0 | Integración de Leaflet con React 19 |
 | Playwright | 1.64.1 | Pruebas end-to-end |
 | Vitest | 3.2.4 | Pruebas unitarias de la capa de datos |
 
@@ -57,7 +58,8 @@ components/
   layout/      Header, MenuMovil, Footer, CabeceraPagina, DocumentoLegal
   sections/    Secciones de la portada
   menu/        PlatoCarta, NavegacionCarta, SelectorLocal
-  locations/   DirectorioLocales, MapaLocales, MapaNoDisponible, TarjetaLocal
+  locations/   DirectorioLocales, MapaLeaflet, FichaLocal,
+               TarjetaLocalMapa, TarjetaLocal, marcador-cuernos
   forms/       SelectorReserva
   motion/      Revelar
   analytics/   Analitica, RegistroEventos
@@ -145,8 +147,6 @@ Cambiarlas exige volver a desplegar. Ver `.env.example` y `docs/despliegue.md`.
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | Sí en producción | Canonicals y sitemap apuntan a `localhost` |
 | `NEXT_PUBLIC_INDEXABLE` | Sí en producción | `robots.txt` bloquea todo el rastreo |
-| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | No | El mapa se sustituye por un aviso; el directorio sigue completo |
-| `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID` | No | Se usan estilos declarados en código |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | No | No se carga analítica ni aviso de cookies |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | No | Sin meta de verificación |
 

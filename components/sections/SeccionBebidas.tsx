@@ -44,13 +44,6 @@ export function SeccionBebidas() {
               </p>
             </Revelar>
 
-            <Revelar retardo={0.1}>
-              <p className="mt-6 max-w-md rounded-lh border-l-2 border-lh-ambar bg-lh-carbon/60 px-5 py-4 text-apunte leading-relaxed text-lh-marfil/65">
-                La carta de bebidas se consulta en el restaurante: pídesela a nuestro equipo de sala
-                al sentarte.
-              </p>
-            </Revelar>
-
             <Revelar retardo={0.16} className="mt-8 flex flex-col gap-3 sm:flex-row">
               <BotonEnlace href="/carta#bebidas" variante="secundario">
                 Ver la carta <FlechaCta />

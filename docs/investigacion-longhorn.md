@@ -144,9 +144,11 @@ no estimaciones.
    localidad y se mantuvieron las coordenadas oficiales.
 2. **Chiclayo**: el JSON-LD no incluye teléfono.
 3. **Mega Plaza**: el JSON-LD no incluye código postal.
-4. **San Juan de Lurigancho**: no hay coordenadas de fuente oficial. **No se
-   publica marcador en el mapa** para no dirigir a nadie a un punto equivocado;
-   sí aparece en el directorio con enlace de búsqueda en Google Maps.
+4. **San Juan de Lurigancho**: LongHorn no publica coordenadas. Las del mapa
+   (*) proceden de **OpenStreetMap**, que sitúa el centro comercial Mall
+   Aventura SJL en Av. Lurigancho 997, Zárate —coherente con la «cuadra 9»
+   que documenta Perú Retail—. Marcan el edificio, no la unidad del 3.er
+   nivel; queda anotado en la ficha del local.
 
 ### Razones sociales
 
@@ -249,7 +251,7 @@ El detalle completo está en `docs/identidad-visual.md`.
 |---|---|---|
 | Horarios de atención | No publicados en ningún canal oficial | La ficha de cada local remite a su Google Maps |
 | Carta de bebidas | No incluida en el PDF oficial | Sección informativa, sin platos inventados |
-| Coordenadas de SJL | Sin fuente oficial | Sin marcador en el mapa |
+| Coordenadas exactas de SJL | LongHorn no las publica | El mapa usa el punto del centro comercial (OpenStreetMap) |
 | Correo de contacto | No publicado | Sin formulario de contacto |
 | Datos fiscales (RUC, domicilio) | No publicados | Textos legales pendientes de aprobación |
 | Estado del local «Centro Cívico» | Fuentes contradictorias | No publicado |

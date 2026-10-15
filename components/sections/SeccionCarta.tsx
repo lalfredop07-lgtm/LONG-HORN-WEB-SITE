@@ -5,7 +5,6 @@ import { CATEGORIAS_PORTADA } from "@/data/categorias-portada";
 import { BotonEnlace, FlechaCta } from "@/components/ui/Boton";
 import { Revelar } from "@/components/motion/Revelar";
 import { Rojo } from "@/components/ui/Resaltado";
-import { totalPlatosPublicados } from "@/lib/carta";
 
 /**
  * «Nuestra carta»: la sección más importante después de la portada.
@@ -16,7 +15,6 @@ import { totalPlatosPublicados } from "@/lib/carta";
  * en escritorio, una rejilla de cinco columnas.
  */
 export function SeccionCarta() {
-  const total = totalPlatosPublicados();
 
   return (
     <section
@@ -40,9 +38,6 @@ export function SeccionCarta() {
           <h2 id="titulo-carta" className="text-display-lg font-normal text-lh-marfil">
             Nuestra <Rojo>Carta</Rojo>
           </h2>
-          <p className="mt-5 text-cuerpo-lg text-lh-marfil/78">
-            Mucho más que cortes.
-          </p>
           <span aria-hidden="true" className="mx-auto mt-7 block h-px w-16 bg-lh-red" />
         </Revelar>
 
@@ -127,9 +122,6 @@ export function SeccionCarta() {
           <BotonEnlace href="/carta" tamano="lg">
             Ver la carta completa <FlechaCta />
           </BotonEnlace>
-          <p className="text-apunte text-lh-marfil/60">
-            {total} platos y cortes, con sus precios actualizados.
-          </p>
         </Revelar>
       </div>
     </section>

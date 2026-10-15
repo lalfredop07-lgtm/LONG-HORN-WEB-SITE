@@ -32,9 +32,6 @@ export function Footer() {
           {/* Marca */}
           <div>
             <Logo alto={64} className="h-16 w-auto" />
-            <p className="mt-6 max-w-sm text-apunte leading-relaxed text-lh-marfil/60">
-              {MARCA.descripcionOficial}
-            </p>
 
             <div className="mt-7 flex items-center gap-3">
               {MARCA.redes.map((red) => (
