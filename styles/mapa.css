@@ -1,0 +1,260 @@
+/* ==================================================================== *
+ * MAPA DE LOCALES — tema LongHorn para Leaflet
+ *
+ * Leaflet trae estilos claros por defecto. Aquí se reescriben los
+ * controles, las ventanas emergentes y los marcadores para que encajen
+ * con la identidad de la marca: carbón, madera, marfil y rojo.
+ * ==================================================================== */
+
+.lh-mapa {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lh-lg);
+  border: 1px solid color-mix(in oklab, var(--color-lh-madera-600) 70%, transparent);
+  background: #10100f;
+}
+
+.lh-mapa .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #10100f;
+  font-family: var(--font-sans);
+  /* El mapa no debe secuestrar el scroll de la página en móvil. */
+  outline: none;
+}
+
+/* Las teselas de OpenStreetMap son claras. Se invierten y se corrige el
+   tono para obtener un mapa oscuro coherente con la marca, conservando
+   la legibilidad de calles y etiquetas. El filtro se aplica solo al panel
+   de teselas: los marcadores quedan intactos. */
+.lh-mapa[data-capa="mapa"] .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(190deg) brightness(0.66) contrast(1) saturate(0.22) sepia(0.4);
+}
+
+/* El satélite solo se atenúa, para no romper la atmósfera oscura. */
+.lh-mapa[data-capa="satelite"] .leaflet-tile-pane {
+  filter: saturate(0.85) brightness(0.78) contrast(1.05);
+}
+
+/* ------------------------------ Pin ------------------------------- */
+
+.lh-pin {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 58px;
+  transform: scale(var(--lh-pin-escala, 1));
+  transform-origin: 50% 100%;
+  transition:
+    transform 320ms var(--ease-lh),
+    filter 320ms var(--ease-lh);
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.55));
+  cursor: pointer;
+}
+
+.lh-pin__gota {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Los cuernos se colocan dentro de la cabeza circular de la gota. */
+.lh-pin__cuernos {
+  position: absolute;
+  top: 24%;
+  left: 50%;
+  width: 60%;
+  transform: translate(-50%, -32%);
+  pointer-events: none;
+}
+
+.lh-pin__etiqueta {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-lh-marfil);
+  text-shadow:
+    0 1px 3px rgb(0 0 0 / 0.95),
+    0 0 10px rgb(0 0 0 / 0.8);
+  pointer-events: none;
+}
+
+.lh-marcador:hover .lh-pin {
+  transform: scale(calc(var(--lh-pin-escala, 1) * 1.1));
+  filter: drop-shadow(0 8px 14px rgb(0 0 0 / 0.65));
+}
+
+.lh-pin--activo {
+  filter: drop-shadow(0 0 16px rgb(252 27 43 / 0.55)) drop-shadow(0 8px 14px rgb(0 0 0 / 0.6));
+}
+
+/* Pulso del marcador seleccionado: una sola onda, discreta. */
+.lh-pin--activo::before {
+  content: "";
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  margin-left: -23px;
+  border-radius: 50%;
+  border: 2px solid var(--color-lh-red);
+  animation: lh-pulso 2.4s var(--ease-lh) infinite;
+  pointer-events: none;
+}
+
+@keyframes lh-pulso {
+  0% { opacity: 0.75; transform: scale(0.65); }
+  70% { opacity: 0; transform: scale(1.7); }
+  100% { opacity: 0; transform: scale(1.7); }
+}
+
+/* --------------------------- Agrupación --------------------------- */
+
+.lh-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem 0.4rem 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #C1121F, #7E0C16);
+  border: 1.5px solid rgb(243 234 223 / 0.5);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.55);
+  cursor: pointer;
+  transition: transform 260ms var(--ease-lh);
+}
+.lh-cluster:hover { transform: scale(1.07); }
+.lh-cluster__cuernos { width: 22px; color: #fff; }
+.lh-cluster__n {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+/* -------------------------- Controles ----------------------------- */
+
+.lh-mapa .leaflet-control-zoom,
+.lh-mapa .leaflet-bar {
+  border: 1px solid color-mix(in oklab, var(--color-lh-madera-500) 85%, transparent);
+  border-radius: var(--radius-lh-md);
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.5);
+}
+
+.lh-mapa .leaflet-control-zoom a,
+.lh-mapa .leaflet-bar a {
+  width: 38px;
+  height: 38px;
+  line-height: 36px;
+  background: color-mix(in oklab, var(--color-lh-carbon) 92%, transparent);
+  color: var(--color-lh-marfil);
+  border-bottom-color: color-mix(in oklab, var(--color-lh-madera-500) 70%, transparent);
+  font-size: 1.15rem;
+  transition: background-color 180ms var(--ease-lh), color 180ms var(--ease-lh);
+}
+
+.lh-mapa .leaflet-control-zoom a:hover,
+.lh-mapa .leaflet-bar a:hover {
+  background: var(--color-lh-madera-700);
+  color: #fff;
+}
+
+.lh-mapa .leaflet-control-zoom a.leaflet-disabled {
+  opacity: 0.4;
+  background: color-mix(in oklab, var(--color-lh-carbon) 92%, transparent);
+}
+
+/* ------------------------- Atribución ----------------------------- */
+
+.lh-mapa .leaflet-control-attribution {
+  background: rgb(21 17 15 / 0.82);
+  color: color-mix(in oklab, var(--color-lh-marfil) 60%, transparent);
+  font-size: 0.64rem;
+  padding: 2px 7px;
+  border-top-left-radius: var(--radius-lh);
+  backdrop-filter: blur(4px);
+}
+.lh-mapa .leaflet-control-attribution a {
+  color: var(--color-lh-ambar-claro);
+  text-decoration: none;
+}
+.lh-mapa .leaflet-control-attribution a:hover { text-decoration: underline; }
+
+/* ---------------------- Ventana emergente ------------------------- */
+
+.lh-mapa .leaflet-popup-content-wrapper {
+  background: transparent;
+  box-shadow: none;
+  border-radius: var(--radius-lh-lg);
+  padding: 0;
+}
+
+.lh-mapa .leaflet-popup-content {
+  margin: 0;
+  width: 272px !important;
+  line-height: inherit;
+}
+
+.lh-mapa .leaflet-popup-tip {
+  background: var(--color-lh-carbon-800);
+  border: 1px solid color-mix(in oklab, var(--color-lh-madera-600) 80%, transparent);
+  box-shadow: none;
+}
+
+.lh-mapa .leaflet-popup-close-button {
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(21 17 15 / 0.75);
+  color: var(--color-lh-marfil);
+  font-size: 1.1rem;
+  font-weight: 400;
+  backdrop-filter: blur(4px);
+  transition: background-color 180ms var(--ease-lh);
+}
+.lh-mapa .leaflet-popup-close-button:hover {
+  background: var(--color-lh-red-accion);
+  color: #fff;
+}
+
+/* Leaflet aplica una transición de opacidad al abrir; la suavizamos. */
+.lh-mapa .leaflet-fade-anim .leaflet-popup {
+  transition: opacity 260ms var(--ease-lh);
+}
+
+/* ------------------- Preferencia de movimiento -------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .lh-pin,
+  .lh-cluster,
+  .lh-mapa .leaflet-fade-anim .leaflet-popup {
+    transition: none !important;
+  }
+  .lh-pin--activo::before {
+    animation: none;
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+/* La barra de escala es útil en escritorio; en móvil compite con los
+   controles del mapa y aporta poco. */
+@media (max-width: 1023px) {
+  .lh-mapa .leaflet-control-scale {
+    display: none;
+  }
+}

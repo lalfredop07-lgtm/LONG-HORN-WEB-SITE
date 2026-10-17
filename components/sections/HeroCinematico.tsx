@@ -1,0 +1,165 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+
+import { BotonEnlace, FlechaCta } from "@/components/ui/Boton";
+import { Rojo } from "@/components/ui/Resaltado";
+import { useConexionAptaParaVideo, useMovimientoReducido } from "@/lib/hooks/navegador";
+
+/**
+ * Fotograma 0 del propio vídeo: evita cualquier salto visual al arrancar.
+ *
+ * El nombre lleva sufijo de versión a propósito. Los navegadores guardan el
+ * vídeo en una caché de medios propia, indexada por URL, que ni siquiera una
+ * recarga forzada vacía: si se sustituye el archivo conservando el nombre, el
+ * visitante que ya estuvo en la página sigue viendo el vídeo antiguo. Al
+ * cambiar de contenido hay que cambiar también de nombre.
+ */
+const POSTER = "/videos/hero-portada-fuego-poster.webp";
+const VIDEO_ESCRITORIO = "/videos/hero-portada-fuego.mp4";
+const VIDEO_MOVIL = "/videos/hero-portada-fuego-movil.mp4";
+
+/**
+ * Portada cinematográfica.
+ *
+ * Estrategia de carga: el póster (imagen optimizada, con `priority`) es el
+ * LCP y se muestra siempre. El vídeo se monta encima solo cuando:
+ *   · el usuario no ha pedido reducir movimiento,
+ *   · la conexión no está en modo ahorro de datos,
+ *   · y el archivo existe.
+ * Así el hero nunca depende del vídeo para verse bien ni para medir rápido.
+ */
+export function HeroCinematico() {
+  const movimientoReducido = useMovimientoReducido();
+  const conexionApta = useConexionAptaParaVideo();
+  const [videoListo, setVideoListo] = useState(false);
+  const [posterPintado, setPosterPintado] = useState(false);
+  const video = useRef<HTMLVideoElement>(null);
+
+  /*
+   * Secuencia de carga del hero, pensada alrededor del LCP.
+   *
+   * 1. El póster (imagen optimizada, `priority`) se descarga solo: es el
+   *    elemento que mide el LCP y no compite con nada.
+   * 2. Cuando el póster ya está pintado, se monta el vídeo.
+   * 3. El vídeo arranca en su fotograma 0, que ES exactamente el póster,
+   *    así que el relevo no se percibe y no hace falta un fundido largo
+   *    (un fundido largo retrasaría el LCP del propio vídeo).
+   */
+  const mostrarVideo = !movimientoReducido && conexionApta && posterPintado;
+
+  // Pausa el vídeo cuando el hero sale de pantalla: no gasta CPU ni batería.
+  useEffect(() => {
+    const nodo = video.current;
+    if (!nodo || !mostrarVideo) return;
+
+    const observador = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada?.isIntersecting) void nodo.play().catch(() => {});
+        else nodo.pause();
+      },
+      { threshold: 0.05 },
+    );
+    observador.observe(nodo);
+    return () => observador.disconnect();
+  }, [mostrarVideo]);
+
+  return (
+    <section
+      className="relative isolate flex min-h-[max(34rem,88svh)] flex-col justify-end overflow-hidden lg:min-h-[max(40rem,94svh)]"
+      aria-labelledby="titular-portada"
+    >
+      {/* Capa visual */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src={POSTER}
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          // `onLoad` solo no basta: cuando el póster ya está en la caché del
+          // navegador termina de cargarse antes de que React hidrate, el
+          // evento se pierde y el vídeo no llega a montarse nunca. El callback
+          // de ref se ejecuta en el commit y consulta el estado real del
+          // <img>, así que cubre también ese caso.
+          ref={(nodo) => {
+            if (nodo?.complete) setPosterPintado(true);
+          }}
+          onLoad={() => setPosterPintado(true)}
+          // El encuadre cambia por dispositivo: en vertical interesa la carne,
+          // no el fondo. `object-position` evita recortes desafortunados.
+          className="object-cover object-[40%_center] sm:object-center"
+        />
+
+        {mostrarVideo ? (
+          <video
+            ref={video}
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="auto"
+            onCanPlay={() => setVideoListo(true)}
+            aria-hidden="true"
+            tabIndex={-1}
+            className={[
+              "absolute inset-0 h-full w-full object-cover object-[40%_center] transition-opacity duration-200 sm:object-center",
+              videoListo ? "opacity-100" : "opacity-0",
+            ].join(" ")}
+          >
+            {/* El móvil descarga 418 KB en vez de 1,1 MB. */}
+            <source src={VIDEO_MOVIL} type="video/mp4" media="(max-width: 640px)" />
+            <source src={VIDEO_ESCRITORIO} type="video/mp4" />
+          </video>
+        ) : null}
+
+        {/* Gradientes de legibilidad: el texto siempre sobre zona controlada */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-t from-lh-carbon via-lh-carbon/55 to-lh-carbon/35 sm:bg-gradient-to-r sm:from-lh-carbon sm:via-lh-carbon/72 sm:to-transparent"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-lh-carbon to-transparent"
+        />
+      </div>
+
+      {/* Contenido */}
+      <div className="contenedor-ancho relative pb-20 pt-32 sm:pb-24 lg:pb-32">
+        <div className="max-w-2xl">
+          <p
+            className="eyebrow mb-5 text-lh-ambar-claro"
+            data-entrada="1"
+          >
+            Carnes · Parrillas · Grill &amp; Drinks
+          </p>
+
+          <h1
+            id="titular-portada"
+            className="text-display-xl font-normal leading-[0.92] text-lh-marfil"
+            data-entrada="2"
+          >
+            El fuego
+            <br />
+            nos <Rojo>une.</Rojo>
+          </h1>
+
+          <div
+            className="mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4"
+            data-entrada="3"
+          >
+            <BotonEnlace href="/carta" tamano="lg">
+              Ver nuestra carta <FlechaCta />
+            </BotonEnlace>
+            <BotonEnlace href="/reservas" variante="secundario" tamano="lg">
+              Reservar mesa
+            </BotonEnlace>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
