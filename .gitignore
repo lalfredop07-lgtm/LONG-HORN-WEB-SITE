@@ -49,3 +49,7 @@ NUEVAS FOTOS/
 RECURSOS/
 assets-fuente/
 assets-generados/
+
+# ZIP de entrega: es un empaquetado del propio repositorio, no un archivo
+# fuente — no tiene que vivir dentro del repositorio.
+*.zip
