@@ -54,7 +54,14 @@ export function PlatoCarta({ plato }: { plato: Plato }) {
               <p className="shrink-0 font-sans text-[1rem] font-bold tabular-nums text-lh-ambar-claro sm:text-[1.05rem]">
                 {precio}
               </p>
-            ) : null}
+            ) : (
+              // Publicado pero sin precio verificado todavía (p. ej. un
+              // cóctel que solo tiene precio de promoción 2x/3x): se dice
+              // explícitamente en vez de dejar un hueco que parezca un error.
+              <p className="shrink-0 text-[0.72rem] uppercase tracking-[0.1em] text-lh-marfil/45">
+                Consultar precio
+              </p>
+            )}
           </div>
 
           {plato.presentacion || plato.comensales ? (
@@ -68,6 +75,12 @@ export function PlatoCarta({ plato }: { plato: Plato }) {
           {plato.descripcion ? (
             <p className="mt-2 max-w-2xl text-[0.9rem] leading-relaxed text-lh-marfil/62">
               {plato.descripcion}
+            </p>
+          ) : null}
+
+          {plato.ingredientes && plato.ingredientes.length > 0 ? (
+            <p className="mt-1.5 max-w-2xl text-[0.8rem] italic leading-relaxed text-lh-marfil/50">
+              {plato.ingredientes.join(" · ")}
             </p>
           ) : null}
         </div>

@@ -28,8 +28,11 @@ Las fotografías se extrajeron aparte con `scripts/build-food-photos.py`.
 
 ## Recuento verificado
 
-**103 referencias.** Comprobado en `tests/unit/datos.test.ts` y en
-`tests/e2e/carta.spec.ts`, que fallan si el número cambia sin querer.
+**103 referencias de alimentos** (de este PDF) **+ 56 de bebidas** (28
+publicadas, 28 pendientes — ver «Bebidas» más abajo) **= 159 en total**, de
+las que **131 están publicadas**. Comprobado en `tests/unit/datos.test.ts` y
+en `tests/e2e/carta.spec.ts`, que fallan si alguno de estos números cambia
+sin querer.
 
 | Categoría | Platos | Rango |
 |---|---|---|
@@ -67,27 +70,56 @@ termina en «…papas fritas o papa al horno o camote» y se corta. En lugar de
 inventar el final, se resumió como «Incluye guarnición a escoger.» y se dejó
 constancia en el campo `notaFuente` del plato.
 
-## Categorías sin datos publicables ⚠️
+## Bebidas
 
-El PDF oficial **no incluye**:
+El PDF oficial de alimentos **no incluye** bebidas, cócteles, cervezas, vinos
+ni postres — ausencia llamativa, porque la marca se llama «Grill & Drinks».
+Esa carencia se cerró investigando cuatro fuentes aparte (ver «Fuentes de
+bebidas» abajo): la propia carta digital oficial, Rappi, y un recetario
+histórico de terceros usado solo como lista de borradores.
 
-- bebidas sin alcohol
-- cervezas
-- cócteles y destilados
-- vinos
-- postres
-- combos y promociones
+**Resultado:** 56 bebidas en `data/carta.ts`, 28 publicadas y 28 ocultas.
 
-Es una ausencia llamativa, porque la marca se llama «Grill & Drinks» y declara
-cócteles y vinos premium entre sus especialidades.
+| Subcategoría | Publicadas | Ocultas (pendientes) | Fuente de lo publicado |
+|---|---|---|---|
+| Vinos por Copa | 7 | 0 | Carta digital oficial — precio individual real |
+| Pisco Sours | 5 | 3 | Festival de Sours (carta digital) — sin precio unitario |
+| Chilcanos | 1 (genérico) | 10 (sabores) | Happy Hour (carta digital) — sin precio unitario |
+| Cócteles Clásicos | 5 | 7 | Happy Hour (carta digital) — sin precio unitario |
+| Cervezas | 3 | 0 | Rappi, delivery San Borja |
+| Bebidas sin Alcohol | 7 | 0 | Rappi, delivery San Borja |
+| Cócteles de Autor | 0 | 8 | — (ninguno confirmado; la pestaña no aparece) |
 
-**Decisión tomada:** la sección «Bebidas y cócteles» existe en la navegación y
-en la carta, con una explicación honesta de que la lista se consulta en el
-restaurante. **No se publica ni un solo nombre o precio de bebida.**
+Las 28 ocultas, por qué y cómo publicarlas: **`docs/bebidas-pendientes.md`**.
 
-La estructura ya está lista para recibirlos: en cuanto el cliente facilite la
-carta de bebidas, basta con añadir los platos con `categoria: "bebidas"` y poner
-`sinCartaPublicada: false` en el grupo.
+### Fuentes de bebidas
+
+- **Carta digital oficial** (`longhorn-carta-digital-bebidas` en
+  `data/fuentes.ts`) — visor de 40 páginas sin capa de texto en
+  `longhorn.com.pe/CartaDigital/01/mobile/index.html`; solo 2 de las 40
+  páginas tratan bebidas: «Happy Hour» (2x S/29) y «Vino por Copa» (precio
+  individual). Esas promociones dan **nombre** verificado pero no un precio
+  por unidad, así que esos platos se publican con `precio` ausente y un
+  texto «Consultar precio» en vez de un número inventado.
+- **Rappi, sede San Borja** (`rappi-san-borja`) — cervezas y bebidas sin
+  alcohol con precio de delivery/recojo de una sola sede. Se publican con
+  `disponibleEn: ["san-borja"]`, nunca como precio general de la red.
+- **Recetario histórico de 2018** (`scribd-recetario-2018`, confianza baja)
+  — documento de terceros en Scribd con 27 cócteles. Nunca se publica
+  directamente: solo alimenta `docs/bebidas-pendientes.md` como borradores
+  que el restaurante debe confirmar.
+- **mesa 24/7, Pide online** (`mesa247-pideonline`) — probablemente tiene
+  precios reales, pero exige iniciar sesión antes de mostrar nada y no hay
+  modo invitado. Nunca se creó una cuenta para sortear el login; queda
+  registrada como fuente intentada y bloqueada, no como consultada.
+
+### Por qué «Cócteles de Autor» no aparece como pestaña
+
+`CartaPorCategorias.tsx` solo muestra una subcategoría cuando tiene al menos
+un producto **publicado**. Ninguno de los 8 cócteles de autor está
+confirmado en una fuente vigente, así que la pestaña simplemente no se
+renderiza — no hace falta ocultarla a mano, y aparecerá sola en cuanto se
+publique el primero.
 
 ## Cómo mantener la carta
 

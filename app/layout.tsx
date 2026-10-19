@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bodoni_Moda, Inter } from "next/font/google";
+import { Bodoni_Moda, Familjen_Grotesk } from "next/font/google";
 
 import "@/styles/globals.css";
 
@@ -31,11 +31,18 @@ const display = Bodoni_Moda({
   adjustFontFallback: true,
 });
 
-/** Tipografía funcional: máxima legibilidad en móvil para carta y formularios. */
-const sans = Inter({
+/**
+ * Tipografía funcional. Pasó por Inter (demasiado genérica, de interfaz)
+ * y por Plus Jakarta Sans (más editorial, pero aún una grotesca bastante
+ * vista). Familjen Grotesk tiene rasgos propios —la «g» de caja baja, las
+ * curvas de la «a»— que la hacen reconocible sin perder legibilidad en
+ * párrafos largos ni en móvil.
+ */
+const sans = Familjen_Grotesk({
   subsets: ["latin"],
   display: "swap",
   variable: "--fuente-sans",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {

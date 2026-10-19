@@ -8,7 +8,6 @@ import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import {
   MapContainer,
   Marker,
-  ScaleControl,
   TileLayer,
   ZoomControl,
   useMap,
@@ -431,17 +430,11 @@ export default function MapaLeaflet({
         maxZoom={definicion.zoomMax}
         scrollWheelZoom={false}
         zoomControl={false}
-        attributionControl
+        attributionControl={false}
         className="h-full w-full"
       >
-        <TileLayer
-          key={capa}
-          url={definicion.url}
-          attribution={definicion.atribucion}
-          maxZoom={definicion.zoomMax}
-        />
+        <TileLayer key={capa} url={definicion.url} maxZoom={definicion.zoomMax} />
         <ZoomControl position="bottomright" />
-        <ScaleControl position="bottomleft" imperial={false} />
         <AjustarTamano alRedimensionar={reencuadrar} />
         <GestosCooperativos alAvisar={setAvisoGesto} />
         <Sincronizador

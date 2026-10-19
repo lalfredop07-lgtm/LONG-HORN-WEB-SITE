@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
-import { CabeceraPagina } from "@/components/layout/CabeceraPagina";
 import { SelectorReserva } from "@/components/forms/SelectorReserva";
 import { Rojo } from "@/components/ui/Resaltado";
 import { MARCA } from "@/data/marca";
@@ -19,15 +20,64 @@ export default function PaginaReservas() {
 
   return (
     <>
-      <CabeceraPagina
-        eyebrow="Reservas"
-        titulo={<>Tu mesa te <Rojo>espera.</Rojo></>}
-        descripcion="Elige el local donde quieres sentarte. Te llevaremos al sistema oficial de reservas de LongHorn para elegir día, hora y número de comensales."
-        migas={[
-          { nombre: "Inicio", ruta: "/" },
-          { nombre: "Reservas", ruta: "/reservas" },
-        ]}
-      />
+      {/*
+        Cabecera propia (no CabeceraPagina: esa la comparten otras páginas
+        que no debían cambiar de diseño). Mismo fondo desenfocado que
+        /locales, /carta y /nuestra-historia, con `isolate` obligatorio para
+        que esos hijos con -z-10 no queden tapados por el fondo sólido de la
+        sección. La foto de la parrilla va al lado del texto, pero pequeña
+        (del alto del título, no una columna a pantalla completa).
+      */}
+      <section className="relative isolate overflow-hidden border-b border-lh-madera-700/50 bg-lh-carbon pb-14 pt-32 lg:pb-16 lg:pt-40">
+        <Image
+          src="/images/marca/interior-locales.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          className="-z-10 object-cover object-center opacity-60"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-lh-carbon/78 via-lh-carbon/55 to-lh-carbon"
+        />
+
+        <div className="contenedor-ancho flex flex-col items-center gap-8 sm:flex-row sm:items-center sm:justify-center">
+          <div className="text-center sm:text-left">
+            <nav aria-label="Migas de pan" className="mb-7 flex justify-center sm:justify-start">
+              <ol className="flex flex-wrap items-center gap-2 text-[0.75rem] uppercase tracking-[0.13em] text-lh-marfil/60">
+                <li className="flex items-center gap-2">
+                  <Link href="/" className="lh-inline transition-colors hover:text-lh-marfil">
+                    Inicio
+                  </Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span aria-hidden="true">/</span>
+                  <span aria-current="page" className="text-lh-marfil/80">
+                    Reservas
+                  </span>
+                </li>
+              </ol>
+            </nav>
+
+            <p className="eyebrow mb-4 text-lh-ambar-claro">Reservas</p>
+            <h1 className="max-w-xl text-display-lg font-normal text-lh-marfil">
+              Tu mesa te <Rojo>espera.</Rojo>
+            </h1>
+          </div>
+
+          <figure className="relative aspect-video w-full shrink-0 overflow-hidden rounded-lh-md shadow-lh-lg sm:w-[28rem] lg:w-[34rem]">
+            <Image
+              src="/images/carta/parrilla-para-compartir-horizontal.webp"
+              alt="Mesa LongHorn servida con parrilla para compartir, papas y sangría, con el restaurante de fondo"
+              fill
+              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 28rem, 34rem"
+              className="object-cover"
+            />
+          </figure>
+        </div>
+      </section>
 
       <section className="contenedor-ancho py-seccion-sm">
         <SelectorReserva locales={locales} />

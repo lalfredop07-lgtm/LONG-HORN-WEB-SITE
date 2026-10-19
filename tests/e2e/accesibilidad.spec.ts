@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+import { PLATOS } from "../../data/carta";
+
 const RUTAS = ["/", "/carta", "/locales", "/locales/san-isidro", "/reservas", "/preguntas-frecuentes"];
+const PLATOS_PUBLICADOS = PLATOS.filter((p) => p.estado === "publicado").length;
 
 test.describe("Accesibilidad", () => {
   test("cada página tiene exactamente un h1 y jerarquía de encabezados sin saltos", async ({ page }) => {
@@ -103,10 +106,22 @@ test.describe("Accesibilidad", () => {
     const page = await ctx.newPage();
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByRole("link", { name: /ver nuestra carta/i })).toBeVisible();
+    // El hero ya no lleva CTA propios (ver HeroCinematico): el enlace a la
+    // carta que sigue en la portada es el de la sección «Nuestra carta».
+    await expect(page.getByRole("link", { name: /ver la carta completa/i })).toBeVisible();
 
     await page.goto("/carta");
-    await expect(page.locator("article[id]").first()).toBeVisible();
+    // El filtro de categorías necesita JavaScript para cambiar de pestaña,
+    // pero sin él la carta no queda vacía: el servidor ya decide mostrar
+    // la categoría por defecto («Cortes»), con todos sus platos.
+    const cortes = page.locator("section#grill");
+    await expect(cortes).toBeVisible();
+    await expect(cortes.locator("article[id]").first()).toBeVisible();
+
+    // El resto de la carta no desaparece del documento: sigue presente
+    // (oculta) para que un buscador la rastree, solo que sin JS no hay
+    // forma de alternar a ella desde la interfaz.
+    await expect(page.locator("article[id]")).toHaveCount(PLATOS_PUBLICADOS);
     await ctx.close();
   });
 });

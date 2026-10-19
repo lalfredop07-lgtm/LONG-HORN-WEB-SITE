@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
-import { AVISO_CARTA, VERIFICADO_EL } from "@/data/carta";
+import { VERIFICADO_EL } from "@/data/carta";
 import { MARCA } from "@/data/marca";
 import { BotonEnlace, BotonExterno, FlechaCta } from "@/components/ui/Boton";
-import { NavegacionCarta } from "@/components/menu/NavegacionCarta";
-import { PlatoCarta } from "@/components/menu/PlatoCarta";
+import { CartaPorCategorias } from "@/components/menu/CartaPorCategorias";
 import { SelectorLocal } from "@/components/menu/SelectorLocal";
 import { Rojo } from "@/components/ui/Resaltado";
 import { VolverArriba } from "@/components/ui/VolverArriba";
-import { cartaAgrupada, rangoPrecios, totalPlatosPublicados } from "@/lib/carta";
+import { cartaAgrupada } from "@/lib/carta";
 import { construirMetadata, jsonLdMigas } from "@/lib/seo";
 import { urlAbsoluta } from "@/lib/site";
 
@@ -22,7 +21,12 @@ export const metadata: Metadata = construirMetadata({
   imagenAlt: "Bife angosto LongHorn recién salido de la parrilla",
 });
 
-/** Datos estructurados del menú, solo con platos y precios verificados. */
+/**
+ * Datos estructurados del menú, con TODOS los grupos y platos.
+ *
+ * Es independiente de qué categoría muestre la interfaz en cada momento:
+ * un rastreador que solo lea este bloque ya conoce la carta completa.
+ */
 function jsonLdMenu() {
   const grupos = cartaAgrupada().filter((g) => g.totalPlatos > 0);
   return {
@@ -58,8 +62,6 @@ function jsonLdMenu() {
 
 export default function PaginaCarta() {
   const grupos = cartaAgrupada();
-  const total = totalPlatosPublicados();
-  const rango = rangoPrecios();
 
   return (
     <>
@@ -80,16 +82,9 @@ export default function PaginaCarta() {
         />
 
         <div className="contenedor-ancho text-center">
-          <p className="eyebrow mb-4 text-lh-ambar-claro">
-            {total} platos · Precios en soles
-          </p>
           <h1 className="text-display-lg font-normal text-lh-marfil">
             Descubre nuestra <Rojo>carta.</Rojo>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-cuerpo-lg leading-relaxed text-lh-marfil/75">
-            Cortes, parrillas para compartir, piqueos y las especialidades que llevan años en
-            nuestras mesas.
-          </p>
         </div>
       </section>
 
@@ -98,94 +93,16 @@ export default function PaginaCarta() {
           <SelectorLocal />
         </div>
 
-        <NavegacionCarta grupos={grupos} />
+        {/*
+          Filtro por categoría: solo se ve una a la vez. Las pestañas y
+          los paneles viven en un único componente cliente porque
+          comparten estado (la categoría activa, derivada del hash de la
+          URL). Ver el comentario de cabecera de CartaPorCategorias.tsx.
+        */}
+        <CartaPorCategorias grupos={grupos} />
 
-        {/* Secciones de la carta */}
-        <div className="mt-12 space-y-14 lg:mt-16 lg:space-y-16">
-          {grupos.map((grupo, indice) => (
-            <section
-              key={grupo.id}
-              id={grupo.id}
-              aria-labelledby={`titulo-${grupo.id}`}
-              className={[
-                "scroll-mt-36 overflow-hidden rounded-lh-lg border p-6 sm:p-8 lg:p-10",
-                // Alternar madera y carbón da ritmo al recorrido sin repetir
-                // la misma textura en todas las secciones.
-                indice % 2 === 0
-                  ? "border-lh-madera-600/55 bg-lh-madera-800/55 veta-madera"
-                  : "border-lh-madera-700/50 bg-lh-carbon-800/70",
-              ].join(" ")}
-            >
-              <header className="mb-8 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 border-b border-lh-red/45 pb-5">
-                <div>
-                  <p className="eyebrow mb-2 text-lh-ambar-claro">
-                    {String(indice + 1).padStart(2, "0")}
-                  </p>
-                  <h2
-                    id={`titulo-${grupo.id}`}
-                    className="text-display-sm font-normal text-lh-marfil"
-                  >
-                    {grupo.nombre}
-                  </h2>
-                  {grupo.descripcion ? (
-                    <p className="mt-2.5 max-w-2xl text-[0.92rem] leading-relaxed text-lh-marfil/60">
-                      {grupo.descripcion}
-                    </p>
-                  ) : null}
-                </div>
-                {grupo.totalPlatos > 0 ? (
-                  <p className="shrink-0 text-[0.75rem] uppercase tracking-[0.14em] text-lh-marfil/60">
-                    {grupo.totalPlatos} {grupo.totalPlatos === 1 ? "plato" : "platos"}
-                  </p>
-                ) : null}
-              </header>
-
-              {grupo.sinCartaPublicada ? (
-                <div className="rounded-lh-md border border-lh-madera-600/70 bg-lh-carbon-800 p-6 sm:p-8">
-                  <p className="max-w-2xl text-[0.95rem] leading-relaxed text-lh-marfil/72">
-                    {grupo.notaSinCarta}
-                  </p>
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <BotonExterno href={MARCA.enlaces.reservas} variante="secundario">
-                      Reservar mesa
-                    </BotonExterno>
-                    <BotonExterno href={MARCA.contacto.whatsappUrl} variante="fantasma">
-                      Preguntar por WhatsApp
-                    </BotonExterno>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-10">
-                  {grupo.categorias
-                    .filter((c) => c.platos.length > 0)
-                    .map((categoria) => (
-                      <div key={categoria.id}>
-                        {categoria.subtitulo ? (
-                          <h3 className="eyebrow mb-4 text-lh-ambar-claro">{categoria.subtitulo}</h3>
-                        ) : null}
-                        <div>
-                          {categoria.platos.map((plato) => (
-                            <PlatoCarta key={plato.id} plato={plato} />
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              )}
-            </section>
-          ))}
-        </div>
-
-        {/* Aviso legal literal de la carta */}
         <footer className="mt-16 border-t border-lh-madera-600/60 pt-8">
-          <p className="text-[0.82rem] leading-relaxed text-lh-marfil/60">{AVISO_CARTA}</p>
-          <p className="mt-2 text-[0.78rem] text-lh-marfil/60">
-            Carta verificada el {new Date(VERIFICADO_EL).toLocaleDateString("es-PE", { day: "numeric", month: "long", year: "numeric" })}.
-            {rango ? ` Precios entre S/ ${rango.min} y S/ ${rango.max}.` : ""} La disponibilidad puede
-            variar por local.
-          </p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <BotonEnlace href="/reservas" tamano="lg">
               Reservar mesa <FlechaCta />
             </BotonEnlace>

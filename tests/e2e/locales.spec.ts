@@ -138,11 +138,6 @@ test.describe("Ficha de local", () => {
     expect(restaurante.review).toBeUndefined();
   });
 
-  test("un local sin horario verificado lo dice en vez de inventarlo", async ({ page }) => {
-    await page.goto("/locales/san-isidro");
-    await expect(page.getByText(/no publica el horario/i)).toBeVisible();
-  });
-
   test("el local sin reserva online ofrece una alternativa real", async ({ page }) => {
     await page.goto("/locales/san-juan-de-lurigancho");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("San Juan de Lurigancho");

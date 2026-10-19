@@ -23,7 +23,7 @@ export function SeccionCompartir() {
     >
       {/* Fotografía a sangre como fondo de sección */}
       <Image
-        src="/images/carta/parrilla-para-2.webp"
+        src="/images/carta/parrilla-para-compartir-horizontal.webp"
         alt=""
         aria-hidden="true"
         fill
@@ -32,7 +32,13 @@ export function SeccionCompartir() {
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-lh-carbon/72 sm:bg-gradient-to-r sm:from-lh-carbon sm:via-lh-carbon/82 sm:to-lh-carbon/15"
+        className="absolute inset-0 -z-10 bg-lh-carbon/85 sm:bg-gradient-to-r sm:from-lh-carbon sm:via-lh-carbon/88 sm:to-lh-carbon/40"
+      />
+      {/* Costura superior: la foto emerge de la oscuridad de la sección
+          anterior en vez de aparecer de golpe. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 -z-10 h-24 bg-gradient-to-b from-lh-carbon to-transparent sm:h-32"
       />
 
       <div className="contenedor-ancho">
@@ -42,10 +48,6 @@ export function SeccionCompartir() {
             <h2 id="titulo-compartir" className="text-display-lg font-normal text-lh-marfil">
               Los mejores momentos se <Rojo>comparten.</Rojo>
             </h2>
-            <p className="mt-6 text-cuerpo-lg leading-relaxed text-lh-marfil/78">
-              Una tabla en el centro, platos que pasan de mano en mano y una sobremesa que se alarga.
-              Así se come en LongHorn.
-            </p>
           </Revelar>
 
           <Revelar retardo={0.1}>

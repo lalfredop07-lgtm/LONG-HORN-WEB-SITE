@@ -122,10 +122,14 @@ Flujo implementado:
 
 1. La persona entra en `/reservas` (o pulsa cualquier CTA de reserva).
 2. Elige su local en un selector agrupado por ciudad.
-3. La página dice explícitamente qué va a pasar: que el siguiente paso ocurre
-   en el sistema oficial y que **la reserva solo queda confirmada cuando ese
-   sistema lo indique**.
+3. La página explica que el siguiente paso ocurre en el sistema oficial, donde
+   se elige fecha, hora y número de personas.
 4. El botón abre el *deep link* del local en una pestaña nueva.
+
+> El aviso de que «la reserva solo queda confirmada cuando el sistema lo
+> indique» se mostró en pantalla hasta que el cliente pidió quitarlo; sigue
+> siendo cierto (no hay confirmación falsa en esta página), solo que ya no se
+> dice de forma explícita en la interfaz.
 
 Los 12 enlaces están en `data/locales.ts` (`urlReservas`) y una prueba comprueba
 que todos apunten a `longhorn.mesa247.pe/reservas/`.

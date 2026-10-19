@@ -9,7 +9,6 @@ export const NAV_PRINCIPAL: EnlaceNav[] = [
   { href: "/nuestra-historia", etiqueta: "Nuestra historia" },
   { href: "/carta", etiqueta: "Carta" },
   { href: "/locales", etiqueta: "Locales" },
-  { href: "/experiencias", etiqueta: "Experiencias" },
 ];
 
 export const CTA_RESERVA: EnlaceNav = { href: "/reservas", etiqueta: "Reservar mesa" };

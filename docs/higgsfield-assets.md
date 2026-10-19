@@ -10,6 +10,7 @@ Se generaron **3 recursos** con la API de Higgsfield
 | 1 | Vídeo del hero | `kling-video/v2.5-turbo/pro/text-to-video` | 5 s, cfg 0.5 | 1920×1080, 24 fps, 10,3 MB |
 | 2 | Bucle de brasas | `minimax/hailuo-2.3/standard/text-to-video` | 6 s | 721 KB |
 | 3 | Cóctel de barra | `higgsfield-ai/soul/standard` | 3:4, 1080p | 1536×2048 |
+| 4 | Ambiente de interior (fondo de /locales) | `higgsfield-ai/soul/standard` | 16:9, 1080p | 2048×1152 |
 
 Hubo además **una llamada rechazada** por validación (parámetros
 `aspect_ratio: "4:5"` y `resolution: "2K"`, que la especificación OpenAPI
@@ -58,6 +59,17 @@ abstract and atmospheric, photoreal, cinematic macro cinematography, shallow
 depth of field. No text, no people, no food.
 ```
 
+### 4. Ambiente de interior (cabecera de /locales)
+
+```
+Interior of a warm, upscale steakhouse restaurant at night, shot wide. Dark
+walnut wood panelling, leather booth seating, exposed brick, tables set with
+glassware, warm amber pendant lights glowing overhead and soft bokeh
+highlights in the background. Rich browns, deep blacks and golden warm tones,
+moody low-key lighting, cinematic depth of field, photoreal architectural
+interior photography, no people, no text, no logos, no signage.
+```
+
 ### 3. Cóctel
 
 ```
@@ -89,6 +101,7 @@ python3 scripts/optimizar-video.py assets-generados/brasas-original.mp4 brasas
 | `brasas-movil.mp4` | 720 × 405 | 150 KB |
 | `brasas-poster.webp` | 1600 × 900 | 58 KB |
 | `coctel-longhorn.webp` | 1316 × 1754 | 95 KB |
+| `interior-locales.webp` | 1600 × 900 | **16 KB** |
 
 El hero pasó de **10,3 MB a 1,1 MB** (205 KB en móvil) sin pérdida perceptible
 a pantalla completa bajo un degradado.
@@ -111,13 +124,30 @@ Además: `muted`, `loop`, `playsInline`, pausa automática al salir de pantalla
 (IntersectionObserver), y **no se carga** si la persona ha pedido reducir
 movimiento o si el navegador declara ahorro de datos o una conexión lenta.
 
+### El fondo de /locales
+
+Se genera con `scripts/build-fondo-locales.py`, que **hornea el desenfoque en
+el archivo** en vez de aplicarlo con `filter: blur()` en CSS. Dos motivos:
+una imagen difuminada comprime muchísimo mejor (16 KB frente a los ~180 KB
+que ocuparía nítida) y desenfocar en CSS un elemento a pantalla completa es
+costoso en móviles. El oscurecimiento sí queda en CSS, para poder ajustarlo
+sin regenerar el archivo.
+
+```bash
+python3 scripts/build-fondo-locales.py
+```
+
 ## Uso responsable
 
 Esto es importante y se respetó estrictamente:
 
 - Los recursos generados muestran **comida y ambientes conceptuales**: un corte
-  en la parrilla, brasas, un cóctel en una barra. Son escenas genéricas de
-  categoría, no de un local concreto.
+  en la parrilla, brasas, un cóctel en una barra, un comedor cálido. Son
+  escenas genéricas de categoría, no de un local concreto.
+- El fondo de la cabecera de `/locales` es una **imagen de ambiente**, servida
+  muy desenfocada y oscurecida como textura. No lleva rótulo ni pie que la
+  atribuya a ninguna sucursal, y no sustituye a la fotografía real de los
+  locales, que sigue pendiente (ver `docs/pendientes-cliente.md`).
 - **Ninguna imagen generada se presenta como fotografía de una sucursal real.**
 - **No hay fachadas ni interiores de locales generados por IA.** Por eso las
   tarjetas de local son composiciones tipográficas de marca y no «fotos» de

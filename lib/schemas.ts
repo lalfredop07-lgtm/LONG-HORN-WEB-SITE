@@ -30,6 +30,9 @@ export const estadoVerificacionSchema = z.enum([
   "pendiente-confirmar",
   "desactualizado",
   "no-disponible",
+  /** Documentado en una fuente antigua (p. ej. un recetario de 2018), sin
+   *  confirmación de que siga vigente. Nunca se publica automáticamente. */
+  "historico",
 ]);
 export type EstadoVerificacion = z.infer<typeof estadoVerificacionSchema>;
 
@@ -61,7 +64,13 @@ export const categoriaIdSchema = z.enum([
   "carne-y-pasta",
   "guarniciones",
   "menu-kids",
-  "bebidas",
+  "bebidas-cocteles-autor",
+  "bebidas-pisco-sours",
+  "bebidas-chilcanos",
+  "bebidas-cocteles-clasicos",
+  "bebidas-cervezas",
+  "bebidas-sin-alcohol",
+  "bebidas-vinos",
 ]);
 export type CategoriaId = z.infer<typeof categoriaIdSchema>;
 
@@ -127,6 +136,15 @@ export const platoSchema = z.object({
   fuenteId: z.string().min(1),
   verificadoEl: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   estado: z.enum(["publicado", "oculto"]).default("publicado"),
+  /**
+   * Estado de aprobación editorial, independiente de `estado` (que solo
+   * controla si se renderiza). Permite distinguir, p. ej., un trago
+   * `oculto` porque está pendiente de confirmar de uno `oculto` porque
+   * es puramente histórico (recetario antiguo sin vigencia conocida).
+   */
+  estadoVerificacion: estadoVerificacionSchema.optional(),
+  /** Ingredientes principales, solo cuando la fuente los enumera. */
+  ingredientes: z.array(z.string()).optional(),
   /** Texto literal recortado en el documento original, si aplica. */
   notaFuente: z.string().optional(),
 });

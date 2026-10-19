@@ -85,11 +85,12 @@ export function SelectorLocal() {
         ) : null}
       </div>
 
-      <p className="mt-4 text-[0.78rem] leading-relaxed text-lh-marfil/60">
-        {elegido
-          ? `Tus enlaces de reserva apuntan ahora a ${elegido.nombre}. Los precios de la carta son los mismos en toda la red; si tu local tiene alguna variación, te la confirmarán en sala.`
-          : "Elige tu local para que los botones de reserva te lleven directamente a esa sede."}
-      </p>
+      {elegido ? (
+        <p className="mt-4 text-[0.78rem] leading-relaxed text-lh-marfil/60">
+          Tus enlaces de reserva apuntan ahora a {elegido.nombre}. Los precios de la carta son los
+          mismos en toda la red; si tu local tiene alguna variación, te la confirmarán en sala.
+        </p>
+      ) : null}
     </div>
   );
 }

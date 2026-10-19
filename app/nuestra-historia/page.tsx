@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { BotonEnlace, FlechaCta } from "@/components/ui/Boton";
-import { CabeceraPagina } from "@/components/layout/CabeceraPagina";
 import { Revelar } from "@/components/motion/Revelar";
 import { Rojo } from "@/components/ui/Resaltado";
 import { MARCA } from "@/data/marca";
@@ -30,12 +29,6 @@ const HITOS = [
       "La marca llega a once locales en Lima, Piura, Cajamarca y Huancayo, y abre su canal digital de pedidos.",
   },
   {
-    anio: "2024",
-    titulo: "San Juan de Lurigancho",
-    texto:
-      "LongHorn entra en el distrito más poblado del país con un local de 384 m² en el Mall Aventura de San Juan de Lurigancho.",
-  },
-  {
     anio: "Hoy",
     titulo: "Trece locales",
     texto:
@@ -49,15 +42,36 @@ export default function PaginaHistoria() {
 
   return (
     <>
-      <CabeceraPagina
-        eyebrow="Nuestra historia"
-        titulo={<>Más que una <Rojo>parrilla.</Rojo></>}
-        descripcion="Veinticinco años encendiendo la misma brasa, en cinco ciudades del Perú."
-        migas={[
-          { nombre: "Inicio", ruta: "/" },
-          { nombre: "Nuestra historia", ruta: "/nuestra-historia" },
-        ]}
-      />
+      {/*
+        Cabecera propia (no CabeceraPagina: esa la comparten otras páginas
+        sin foto de fondo y centradas sería un cambio que no les toca).
+        Mismo patrón que /locales y /carta: imagen ya desenfocada +
+        degradado para legibilidad. `isolate` es obligatorio aquí: sin él,
+        el fondo sólido de la sección tapa a sus hijos con -z-10 y la
+        imagen nunca llega a pintarse.
+      */}
+      <section className="relative isolate overflow-hidden border-b border-lh-madera-700/50 bg-lh-carbon pb-14 pt-32 lg:pb-16 lg:pt-40">
+        <Image
+          src="/images/marca/interior-locales.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          className="-z-10 object-cover object-center opacity-60"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-lh-carbon/78 via-lh-carbon/55 to-lh-carbon"
+        />
+
+        <div className="contenedor-ancho text-center">
+          <p className="eyebrow mb-4 text-lh-ambar-claro">Nuestra historia</p>
+          <h1 className="mx-auto max-w-3xl text-display-lg font-normal text-lh-marfil">
+            Más que una <Rojo>parrilla.</Rojo>
+          </h1>
+        </div>
+      </section>
 
       {/* Relato */}
       <section className="contenedor-ancho py-seccion-sm">
@@ -83,8 +97,8 @@ export default function PaginaHistoria() {
           <Revelar desde="escala">
             <figure className="relative aspect-[4/5] overflow-hidden rounded-lh-md shadow-lh-lg">
               <Image
-                src="/images/carta/portada-corte-parrilla.webp"
-                alt="Corte de res a la parrilla sobre tabla de madera, fotografía oficial de la carta LongHorn"
+                src="/images/carta/bife-a-la-parrilla-flama.webp"
+                alt="Cortes de carne a la parrilla entre llamas vivas"
                 fill
                 sizes="(max-width: 1024px) 92vw, 46vw"
                 className="object-cover"
@@ -106,7 +120,7 @@ export default function PaginaHistoria() {
             </h2>
           </Revelar>
 
-          <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ol className="mt-12 grid gap-6 sm:grid-cols-3">
             {HITOS.map((hito, i) => (
               <li key={hito.anio}>
                 <Revelar retardo={i * 0.07} className="h-full">
@@ -123,11 +137,6 @@ export default function PaginaHistoria() {
               </li>
             ))}
           </ol>
-
-          <p className="mt-10 max-w-2xl text-[0.78rem] leading-relaxed text-lh-marfil/60">
-            Fechas y cifras tomadas del perfil corporativo de LongHorn y de prensa económica
-            peruana. Las fuentes están documentadas en el repositorio del sitio.
-          </p>
         </div>
       </section>
 

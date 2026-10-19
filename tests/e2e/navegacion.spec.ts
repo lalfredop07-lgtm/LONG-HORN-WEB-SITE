@@ -1,11 +1,15 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Navegación principal", () => {
-  test("la portada carga con su titular y sus CTA", async ({ page }) => {
+  test("la portada carga con el logotipo grande como titular", async ({ page }) => {
+    // El titular ya no es la frase «El fuego nos une»: es el propio
+    // logotipo, grande y centrado, sin botones alrededor (ver
+    // HeroCinematico). Sigue siendo un <h1> real y visible, solo que su
+    // nombre accesible ahora es el alt del logotipo.
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("El fuego");
-    await expect(page.getByRole("link", { name: /ver nuestra carta/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /reservar mesa/i }).first()).toBeVisible();
+    const titular = page.getByRole("heading", { level: 1 });
+    await expect(titular).toBeVisible();
+    await expect(titular.getByRole("img", { name: /longhorn/i })).toBeVisible();
   });
 
   test("el título y la descripción son específicos de cada página", async ({ page }) => {
@@ -63,6 +67,24 @@ test.describe("Menú móvil", () => {
     await expect(dialogo.getByRole("link", { name: "Carta", exact: true })).toBeVisible();
 
     await page.keyboard.press("Escape");
+    await expect(dialogo).toBeHidden();
+  });
+
+  test("se cierra pulsando el propio botón (el caso real en táctil)", async ({ page }) => {
+    // Regresión: MenuMovil se renderizaba como hijo de <header>, así que su
+    // `position: fixed` con z-40 quedaba por delante del botón dentro del
+    // contexto de apilamiento propio del header (z-50 solo protege frente
+    // al resto de la página, no frente a los propios descendientes
+    // posicionados). El botón de cerrar quedaba tapado e inalcanzable al
+    // tocar, aunque Escape sí funcionara. Debe ser hermano de <header>.
+    await page.goto("/");
+    const boton = page.getByRole("button", { name: /abrir menú/i });
+    await boton.click();
+
+    const dialogo = page.getByRole("dialog", { name: /menú de navegación/i });
+    await expect(dialogo).toBeVisible();
+
+    await page.getByRole("button", { name: /cerrar menú/i }).click();
     await expect(dialogo).toBeHidden();
   });
 

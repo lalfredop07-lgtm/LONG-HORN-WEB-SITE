@@ -15,16 +15,39 @@ export function SeccionHistoria() {
   return (
     <section
       aria-labelledby="titulo-historia"
-      className="relative overflow-hidden bg-lh-carbon py-seccion"
+      className="relative isolate overflow-hidden bg-lh-madera-800 py-seccion"
     >
+      {/*
+        Fondo de ambiente, igual de sutil que el de /locales: la imagen ya
+        se sirve desenfocada (scripts/build-fondo-locales.py) y aquí solo
+        se le baja la opacidad y se cubre con el marrón de la sección, para
+        que quede «muy de fondo» y nunca compita con el texto.
+        `isolate` es imprescindible: sin él, estos hijos con -z-10 no
+        forman su propio contexto de apilamiento y el fondo sólido de la
+        sección (bg-lh-madera-800, sin z-index) los tapa por completo, así
+        que la imagen no llega a pintarse nunca.
+      */}
+      <Image
+        src="/images/marca/interior-locales.webp"
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="100vw"
+        className="-z-10 object-cover object-center opacity-45"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 bg-lh-madera-900/55"
+      />
+
       <div className="contenedor-ancho">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Imagen — primero en móvil, segunda en escritorio */}
           <Revelar desde="escala" className="order-1 lg:order-2">
             <figure className="relative aspect-[4/5] overflow-hidden rounded-lh-md sm:aspect-[3/2] lg:aspect-[4/5]">
               <Image
-                src="/images/carta/colita-de-cuadril.webp"
-                alt="Colita de cuadril LongHorn recién salida de la parrilla, cortada en láminas sobre tabla de madera"
+                src="/images/carta/cortes-a-la-parrilla.webp"
+                alt="Bandeja de cortes LongHorn recién salidos de la parrilla"
                 fill
                 sizes="(max-width: 1024px) 92vw, 44vw"
                 className="object-cover"

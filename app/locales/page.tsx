@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { DirectorioLocales } from "@/components/locations/DirectorioLocales";
 import { Rojo } from "@/components/ui/Resaltado";
@@ -33,12 +34,31 @@ export default function PaginaLocales() {
 
   return (
     <>
-      <section className="border-b border-lh-madera-700/50 bg-lh-carbon pb-12 pt-32 lg:pb-14 lg:pt-40">
-        <div className="contenedor-ancho">
+      <section className="relative isolate overflow-hidden border-b border-lh-madera-700/50 bg-lh-carbon pb-14 pt-32 lg:pb-16 lg:pt-40">
+        {/*
+          Fondo de ambiente. La imagen se sirve ya desenfocada (ver
+          scripts/build-fondo-locales.py) y aquí solo se oscurece, de modo
+          que acompañe sin competir con el titular.
+        */}
+        <Image
+          src="/images/marca/interior-locales.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          className="-z-10 object-cover object-center opacity-60"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-lh-carbon/78 via-lh-carbon/55 to-lh-carbon"
+        />
+
+        <div className="contenedor-ancho text-center">
           <p className="eyebrow mb-4 text-lh-ambar-claro">
             {locales.length} locales · {ciudades.length} ciudades
           </p>
-          <h1 className="max-w-3xl text-display-lg font-normal text-lh-marfil">
+          <h1 className="mx-auto max-w-3xl text-display-lg font-normal text-lh-marfil">
             Encuentra tu <Rojo>LongHorn.</Rojo>
           </h1>
         </div>

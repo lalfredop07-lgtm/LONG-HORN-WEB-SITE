@@ -5,7 +5,7 @@ import { BotonExterno, FlechaCta } from "@/components/ui/Boton";
 import { CabeceraPagina } from "@/components/layout/CabeceraPagina";
 import { Revelar } from "@/components/motion/Revelar";
 import { Rojo } from "@/components/ui/Resaltado";
-import { EXPERIENCIAS, NOTA_EXPERIENCIAS } from "@/data/experiencias";
+import { EXPERIENCIAS } from "@/data/experiencias";
 import { MARCA } from "@/data/marca";
 import { formatearPrecio } from "@/lib/carta";
 import { localPorSlug } from "@/lib/locales";
@@ -25,10 +25,6 @@ export default function PaginaExperiencias() {
         eyebrow="Experiencias"
         titulo={<>Para celebrar <Rojo>juntos.</Rojo></>}
         descripcion="Hay días que piden algo más que una reserva. Estas son las experiencias que LongHorn tiene publicadas ahora mismo."
-        migas={[
-          { nombre: "Inicio", ruta: "/" },
-          { nombre: "Experiencias", ruta: "/experiencias" },
-        ]}
       />
 
       <section className="contenedor-ancho py-seccion-sm">
@@ -100,10 +96,6 @@ export default function PaginaExperiencias() {
             );
           })}
         </ul>
-
-        <p className="mt-10 max-w-2xl rounded-lh border-l-2 border-lh-ambar bg-lh-carbon-800 px-5 py-4 text-apunte leading-relaxed text-lh-marfil/60">
-          {NOTA_EXPERIENCIAS}
-        </p>
 
         <div className="mt-10">
           <BotonExterno href={MARCA.enlaces.experiencias} variante="secundario">

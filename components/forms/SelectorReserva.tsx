@@ -62,11 +62,6 @@ export function SelectorReserva({ locales }: { locales: Local[] }) {
               {elegido.direccion}). El siguiente paso se completa en el sistema oficial de reservas
               de LongHorn, donde elegirás fecha, hora y número de personas.
             </p>
-            <p className="mt-3 text-[0.78rem] leading-relaxed text-lh-marfil/60">
-              Tu reserva solo queda confirmada cuando ese sistema te lo indique y te envíe el correo
-              de confirmación. Desde esta página no se confirma ninguna reserva.
-            </p>
-
             <div className="mt-7 flex flex-wrap gap-3">
               <a
                 href={elegido.urlReservas}

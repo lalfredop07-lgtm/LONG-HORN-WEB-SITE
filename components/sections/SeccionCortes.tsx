@@ -14,15 +14,13 @@ type Corte = {
   familia: string;
   presentacion: string;
   precio: number;
-  nota: string;
   imagen: string;
   imagenAlt: string;
 };
 
 /**
  * Selección de cortes destacados.
- * Nombres, gramajes y precios proceden de la carta oficial verificada;
- * la nota es texto editorial propio, sin afirmaciones factuales nuevas.
+ * Nombres, gramajes y precios proceden de la carta oficial verificada.
  */
 const CORTES: Corte[] = [
   {
@@ -31,9 +29,8 @@ const CORTES: Corte[] = [
     familia: "Americana Premium",
     presentacion: "400g",
     precio: 155,
-    nota: "El corte que mejor resume la casa: grano fino, borde de grasa que se vuelve caramelo en la parrilla.",
-    imagen: "/images/carta/bife-angosto.webp",
-    imagenAlt: "Bife angosto LongHorn con marcas de parrilla sobre tabla de madera",
+    imagen: "/images/carta/bife-angosto-nuevo.webp",
+    imagenAlt: "Bife angosto LongHorn con marcas de parrilla sobre tabla de madera, con romero y sal",
   },
   {
     id: "colita-cuadril",
@@ -41,9 +38,8 @@ const CORTES: Corte[] = [
     familia: "Cortes Selectos",
     presentacion: "300g",
     precio: 74,
-    nota: "Americana, jugosa y sin artificios. Se corta en láminas gruesas y se comparte sin pensarlo.",
-    imagen: "/images/carta/colita-de-cuadril.webp",
-    imagenAlt: "Colita de cuadril americana cortada en láminas sobre tabla",
+    imagen: "/images/carta/colita-de-cuadril-nueva.webp",
+    imagenAlt: "Colita de cuadril americana cortada en láminas sobre tabla, con copa de vino",
   },
   {
     id: "tomahawk",
@@ -51,9 +47,8 @@ const CORTES: Corte[] = [
     familia: "Cortes Selectos",
     presentacion: "1200g",
     precio: 200,
-    nota: "Un kilo doscientos de espectáculo. Llega a la mesa y la conversación se detiene un momento.",
-    imagen: "/images/carta/portada-corte-parrilla.webp",
-    imagenAlt: "Corte grueso de res a la parrilla sobre tabla de madera con romero",
+    imagen: "/images/carta/tomahawk-nacional-nuevo.webp",
+    imagenAlt: "Tomahawk Nacional a la parrilla con hueso, servido en bandeja con romero",
   },
   {
     id: "parrilla-4-carnes",
@@ -61,9 +56,8 @@ const CORTES: Corte[] = [
     familia: "Cortes Selectos",
     presentacion: "Para 2",
     precio: 255,
-    nota: "Picanha, bife de chorizo, colita de cuadril y lomo fino. La mesa entera en una sola tabla.",
-    imagen: "/images/carta/parrilla-para-2.webp",
-    imagenAlt: "Parrilla LongHorn con variedad de cortes y acompañamientos",
+    imagen: "/images/carta/parrilla-4-carnes-nueva.webp",
+    imagenAlt: "Parrilla 4 Carnes LongHorn con chorizos, morcillas y cortes a la brasa",
   },
 ];
 
@@ -77,6 +71,11 @@ export function SeccionCortes() {
       aria-labelledby="titulo-cortes"
       className="relative overflow-hidden bg-lh-madera-900 py-seccion"
     >
+      {/* Costura superior: funde el corte duro con la sección anterior */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-lh-carbon/40 to-transparent sm:h-28"
+      />
       {/* Brasa tenue: el fuego reaparece aquí, sin invadir */}
       <div
         aria-hidden="true"
@@ -130,10 +129,6 @@ export function SeccionCortes() {
 
           {/* Selector */}
           <Revelar retardo={0.1} className="flex flex-col">
-            <p className="min-h-[5.5rem] text-cuerpo-lg leading-relaxed text-lh-marfil/78">
-              {corte.nota}
-            </p>
-
             <ul className="mt-6 divide-y divide-lh-madera-600/70 border-y border-lh-madera-600/70">
               {CORTES.map((c, i) => {
                 const seleccionado = i === activo;

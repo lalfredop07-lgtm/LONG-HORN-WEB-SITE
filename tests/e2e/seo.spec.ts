@@ -52,7 +52,10 @@ test.describe("SEO técnico", () => {
     expect(menu).toBeTruthy();
     expect(menu.hasMenuSection.length).toBeGreaterThan(5);
     const platos = menu.hasMenuSection.flatMap((s: { hasMenuItem: unknown[] }) => s.hasMenuItem);
-    expect(platos.length).toBe(103);
+    // 103 platos de alimentos + 28 bebidas publicadas (vinos, cervezas, sin
+    // alcohol y los cócteles con nombre verificado). Los 28 históricos u
+    // ocultos nunca llegan aquí.
+    expect(platos.length).toBe(131);
     for (const plato of platos) {
       if (plato.offers) expect(plato.offers.priceCurrency).toBe("PEN");
     }

@@ -7,7 +7,7 @@ import { TarjetaLocal } from "@/components/locations/TarjetaLocal";
 import { Rojo } from "@/components/ui/Resaltado";
 import { MARCA } from "@/data/marca";
 import { LOCALES } from "@/data/locales";
-import { localPorSlug, localesCercanos, telefonoHref, urlComoLlegar, urlVerEnMapa } from "@/lib/locales";
+import { localPorSlug, localesCercanos, telefonoHref, urlComoLlegar } from "@/lib/locales";
 import { construirMetadata, jsonLdMigas } from "@/lib/seo";
 import { urlAbsoluta } from "@/lib/site";
 
@@ -37,7 +37,7 @@ function jsonLdRestaurante(local: NonNullable<ReturnType<typeof localPorSlug>>) 
     "@id": urlAbsoluta(`/locales/${local.slug}#restaurante`),
     name: local.nombre,
     url: urlAbsoluta(`/locales/${local.slug}`),
-    image: urlAbsoluta("/videos/hero-parrilla-poster.webp"),
+    image: urlAbsoluta("/videos/hero-portada-fuego-poster.webp"),
     servesCuisine: ["Carnes y parrillas", "Peruana", "Americana"],
     priceRange: local.rangoPrecio ?? undefined,
     currenciesAccepted: "PEN",
@@ -193,32 +193,6 @@ export default async function PaginaLocal({ params }: Props) {
                 )}
               </Dato>
 
-              <Dato etiqueta="Horario">
-                {local.horarios ? (
-                  <ul className="space-y-1">
-                    {local.horarios.map((tramo, i) => (
-                      <li key={i}>
-                        {tramo.dias.join(", ")}: {tramo.abre}–{tramo.cierra}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <span className="text-lh-marfil/60">
-                    LongHorn no publica el horario de este local en sus canales oficiales. Puedes
-                    consultarlo actualizado en{" "}
-                    <a
-                      href={urlVerEnMapa(local)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="lh-inline underline underline-offset-4 hover:text-lh-red"
-                    >
-                      su ficha de Google Maps
-                    </a>
-                    .
-                  </span>
-                )}
-              </Dato>
-
               {local.servicios.length > 0 ? (
                 <Dato etiqueta="Servicios">
                   <ul className="flex flex-wrap gap-2">
@@ -232,10 +206,6 @@ export default async function PaginaLocal({ params }: Props) {
                     ))}
                   </ul>
                 </Dato>
-              ) : null}
-
-              {local.razonSocial ? (
-                <Dato etiqueta="Razón social">{local.razonSocial}</Dato>
               ) : null}
             </dl>
 

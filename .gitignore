@@ -40,6 +40,12 @@ next-env.d.ts
 Thumbs.db
 capturas/
 
-# Originales sin comprimir de Higgsfield (copias maestras, ~11 MB).
-# Si no se quieren en Git, descomentar y guardarlos en el Drive del cliente.
-# assets-generados/
+# Material fuente sin procesar: fotos/vídeos originales del cliente,
+# logotipos de referencia, PDFs de la carta. Nada de esto lo usa la app en
+# ejecución (las versiones optimizadas ya viven en public/), así que no
+# hace falta para compilar ni desplegar. Se queda en el Mac / Drive del
+# cliente, no en el repositorio.
+NUEVAS FOTOS/
+RECURSOS/
+assets-fuente/
+assets-generados/

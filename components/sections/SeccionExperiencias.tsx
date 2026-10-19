@@ -1,9 +1,10 @@
 import Image from "next/image";
 
-import { BotonEnlace, FlechaCta } from "@/components/ui/Boton";
+import { BotonExterno, FlechaCta } from "@/components/ui/Boton";
 import { Revelar } from "@/components/motion/Revelar";
 import { Rojo } from "@/components/ui/Resaltado";
 import { EXPERIENCIAS } from "@/data/experiencias";
+import { MARCA } from "@/data/marca";
 import { formatearPrecio } from "@/lib/carta";
 
 export function SeccionExperiencias() {
@@ -13,9 +14,15 @@ export function SeccionExperiencias() {
   return (
     <section
       aria-labelledby="titulo-experiencias"
-      className="relative overflow-hidden bg-lh-carbon py-seccion"
+      className="relative overflow-hidden bg-lh-madera-800 py-seccion"
     >
-      <div className="contenedor-ancho">
+      {/* Costura superior: funde el corte duro con la sección anterior */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-lh-carbon/40 to-transparent sm:h-28"
+      />
+
+      <div className="contenedor-ancho relative">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div>
             <Revelar>
@@ -53,18 +60,21 @@ export function SeccionExperiencias() {
               </div>
             </Revelar>
 
-            <Revelar retardo={0.16} className="mt-8">
-              <BotonEnlace href="/experiencias" tamano="lg">
+            <Revelar retardo={0.16} className="mt-8 flex justify-center lg:justify-start">
+              {/* Directo al sistema oficial donde se ven y se compran las
+                  experiencias (mismo enlace que «Ver y comprar» en
+                  /experiencias) — no a la página interna de listado. */}
+              <BotonExterno href={experiencia.url ?? MARCA.enlaces.experiencias} tamano="lg">
                 Ver experiencias <FlechaCta />
-              </BotonEnlace>
+              </BotonExterno>
             </Revelar>
           </div>
 
           <Revelar desde="derecha">
             <figure className="relative aspect-[4/3] overflow-hidden rounded-lh-md shadow-lh-lg lg:aspect-[4/5]">
               <Image
-                src="/images/carta/costillas-longhorn-bbq.webp"
-                alt="Costillas LongHorn glaseadas en salsa BBQ, servidas para compartir"
+                src="/images/carta/parrillada-bistec-verduras-brasa.webp"
+                alt="Parrillada de bistec y verduras a la brasa, servida en braseros de mesa"
                 fill
                 sizes="(max-width: 1024px) 92vw, 44vw"
                 className="object-cover"

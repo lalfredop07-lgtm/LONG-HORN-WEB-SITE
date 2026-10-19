@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 import { CTA_RESERVA, NAV_PRINCIPAL } from "@/data/navegacion";
-import { MARCA } from "@/data/marca";
-import { BotonEnlace, BotonExterno } from "@/components/ui/Boton";
+import { BotonEnlace } from "@/components/ui/Boton";
 import { Isotipo } from "@/components/ui/Logo";
 
 type Props = {
@@ -95,7 +94,10 @@ export function MenuMovil({ abierto, alCerrar, rutaActual }: Props) {
         {/* Resplandor de brasa como fondo, muy contenido */}
         <div aria-hidden="true" className="resplandor-brasa pointer-events-none absolute inset-x-0 bottom-0 h-1/2 opacity-45" />
 
-        <nav aria-label="Navegación móvil" className="relative contenedor flex-1">
+        <nav
+          aria-label="Navegación móvil"
+          className="relative contenedor flex flex-1 flex-col justify-center"
+        >
           <ul className="divide-y divide-lh-madera-700/50 border-y border-lh-madera-700/50">
             {NAV_PRINCIPAL.map((enlace, i) => {
               const activo =
@@ -105,6 +107,11 @@ export function MenuMovil({ abierto, alCerrar, rutaActual }: Props) {
                   <Link
                     href={enlace.href}
                     aria-current={activo ? "page" : undefined}
+                    // Cierra siempre al tocar, incluso al enlace de la ruta
+                    // actual (p. ej. «Inicio» estando ya en «/»): ahí la URL
+                    // no cambia, así que el cierre automático por cambio de
+                    // ruta en Header nunca se dispararía.
+                    onClick={alCerrar}
                     className="flex items-baseline gap-4 py-5 transition-colors active:bg-lh-marfil/5"
                   >
                     {/* Numeración decorativa: fuera del nombre accesible del
@@ -126,24 +133,11 @@ export function MenuMovil({ abierto, alCerrar, rutaActual }: Props) {
             })}
           </ul>
 
-          <div className="mt-8 grid gap-3">
-            <BotonEnlace href={CTA_RESERVA.href} tamano="lg" className="w-full">
-              {CTA_RESERVA.etiqueta}
-            </BotonEnlace>
-            <BotonExterno href={MARCA.enlaces.pedidos} variante="secundario" tamano="lg" className="w-full">
-              Pedir delivery
-            </BotonExterno>
-          </div>
+          <BotonEnlace href={CTA_RESERVA.href} tamano="lg" className="mt-8 w-full">
+            {CTA_RESERVA.etiqueta}
+          </BotonEnlace>
 
-          <div className="mt-8 flex items-center justify-between gap-4 text-apunte text-lh-marfil/60">
-            <a
-              href={MARCA.contacto.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 transition-colors hover:text-lh-marfil"
-            >
-              WhatsApp {MARCA.contacto.whatsapp}
-            </a>
+          <div className="mt-8 flex items-center justify-center">
             <Isotipo ancho={44} className="opacity-25" />
           </div>
         </nav>

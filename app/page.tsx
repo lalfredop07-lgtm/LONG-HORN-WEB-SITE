@@ -16,7 +16,7 @@ export const metadata: Metadata = construirMetadata({
   descripcion:
     "Restaurante de carnes, parrillas y cócteles con 13 locales en todo el Perú. Descubre nuestra carta, encuentra tu local y reserva mesa.",
   ruta: "/",
-  imagen: "/videos/hero-parrilla-poster.webp",
+  imagen: "/videos/hero-portada-fuego-poster.webp",
   imagenAlt: "Corte de res sellándose sobre la parrilla LongHorn",
 });
 

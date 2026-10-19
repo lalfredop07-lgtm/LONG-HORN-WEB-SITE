@@ -285,7 +285,7 @@
 @keyframes aparecer {
   from {
     opacity: 0;
-    transform: translate3d(0, 22px, 0);
+    transform: translate3d(0, 60px, 0) scale(0.95);
   }
   to {
     opacity: 1;
@@ -326,18 +326,21 @@ html.js [data-entrada] {
 
 html.js [data-revelar] {
   transition:
-    opacity 760ms var(--ease-lh-entrada) var(--revelar-retardo, 0s),
-    transform 860ms var(--ease-lh-entrada) var(--revelar-retardo, 0s);
+    opacity 900ms var(--ease-lh-entrada) var(--revelar-retardo, 0s),
+    transform 1050ms var(--ease-lh-entrada) var(--revelar-retardo, 0s);
 }
 
 html.js [data-revelar="pendiente"] {
   opacity: 0;
 }
 
-html.js [data-revelar="pendiente"][data-desde="abajo"] { transform: translate3d(0, 28px, 0); }
-html.js [data-revelar="pendiente"][data-desde="izquierda"] { transform: translate3d(-28px, 0, 0); }
-html.js [data-revelar="pendiente"][data-desde="derecha"] { transform: translate3d(28px, 0, 0); }
-html.js [data-revelar="pendiente"][data-desde="escala"] { transform: scale(0.965); }
+/* Recorrido largo y con un punto de escala en todas las variantes (no solo
+   en «escala»): que el movimiento se note de verdad al entrar en pantalla,
+   no solo la opacidad. */
+html.js [data-revelar="pendiente"][data-desde="abajo"] { transform: translate3d(0, 80px, 0) scale(0.96); }
+html.js [data-revelar="pendiente"][data-desde="izquierda"] { transform: translate3d(-80px, 0, 0) scale(0.96); }
+html.js [data-revelar="pendiente"][data-desde="derecha"] { transform: translate3d(80px, 0, 0) scale(0.96); }
+html.js [data-revelar="pendiente"][data-desde="escala"] { transform: scale(0.82); }
 
 html.js [data-revelar="visible"] {
   opacity: 1;
@@ -349,5 +352,46 @@ html.js [data-revelar="visible"] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+}
+
+/* ==================================================================== *
+ * Carta — transición al cambiar de categoría (CartaPorCategorias.tsx)
+ *
+ * El panel usa el atributo nativo `hidden`: mientras está oculto no
+ * existe en el árbol de render (`display: none`), así que al quitarle
+ * `hidden` empieza a pintarse desde cero y la animación se reinicia sola
+ * en cada cambio, sin ningún JavaScript de por medio.
+ * ==================================================================== */
+
+@keyframes carta-panel-entra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lh-carta-panel:not([hidden]) {
+  animation: carta-panel-entra 420ms var(--ease-lh-entrada);
+}
+
+/*
+ * Subpestañas dentro de un panel (hoy, las de Bebidas: Vinos, Chilcanos…).
+ * Mismo mecanismo de `hidden` que el panel principal, pero un fundido más
+ * corto: es un cambio anidado y de menor alcance visual, así que debe
+ * sentirse más inmediato que el cambio de categoría.
+ */
+.lh-sub-panel:not([hidden]) {
+  animation: carta-panel-entra 220ms var(--ease-lh-entrada);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lh-carta-panel:not([hidden]),
+  .lh-sub-panel:not([hidden]) {
+    animation: none;
   }
 }

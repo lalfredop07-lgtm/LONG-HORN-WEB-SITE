@@ -1,9 +1,11 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 type Props = {
   /** Alto en píxeles del lockup. El ancho se calcula por proporción. */
   alto?: number;
   className?: string;
+  style?: CSSProperties;
   /**
    * Carga inmediata sin `<link rel="preload">`. El logotipo está sobre la
    * línea de flotación, pero precargarlo competía con la imagen que mide
@@ -21,7 +23,7 @@ const RATIO = 1717 / 864;
  * Se usa SIEMPRE el archivo original del cliente. No se recrea, no se
  * redibuja y no se altera su composición: solo se escala.
  */
-export function Logo({ alto = 56, className, prioridad = false }: Props) {
+export function Logo({ alto = 56, className, style, prioridad = false }: Props) {
   return (
     <Image
       src="/brand/longhorn-logo.png"
@@ -30,6 +32,7 @@ export function Logo({ alto = 56, className, prioridad = false }: Props) {
       height={alto}
       loading={prioridad ? "eager" : "lazy"}
       className={className}
+      style={style}
       sizes={`${Math.round(alto * RATIO)}px`}
     />
   );

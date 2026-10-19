@@ -75,6 +75,59 @@ const REGISTROS = {
     confianza: "alta",
     notas: "PNG 1774×887 RGBA. Rojo corporativo muestreado del archivo: #FC1B2B.",
   },
+  "longhorn-carta-digital-bebidas": {
+    nombre: "Carta digital oficial LongHorn — páginas de bebidas (Happy Hour, Festival de Sours, Vino por Copa)",
+    url: "https://www.longhorn.com.pe/CartaDigital/01/mobile/index.html",
+    consultadoEl: "2026-10-16",
+    confianza: "alta",
+    notas:
+      "Visor de 40 páginas sin capa de texto (imágenes). De las 40, solo las páginas 39 y 40 corresponden a bebidas: " +
+      "«Happy Hour» (2x S/29, lunes a viernes: fresa colada, piña colada, chilcanos, pisco sours, algarrobina, " +
+      "margarita, mojito), «Festival de Sours» (3x S/25: aguaymanto, arándanos, coca, maracuyá y el tradicional) " +
+      "y «Vino por Copa» (7 vinos con precio individual). Las promociones dan nombre verificado pero NO un precio " +
+      "unitario (solo el precio del combo 2x o 3x); esos platos se publican sin `precio`. Vigente para 5 de los " +
+      "13 locales (Jockey Plaza, San Isidro, Real Plaza Salaverry, Plaza San Miguel y La Rambla - San Borja), " +
+      "según el pie de página de ambas láminas.",
+  },
+  "rappi-san-borja": {
+    nombre: "Rappi — carta de delivery y recojo, sede San Borja",
+    url: "https://www.rappi.com.pe/restaurantes/1081-longhorn",
+    consultadoEl: "2026-10-16",
+    confianza: "media",
+    notas:
+      "Gaseosas, aguas y cervezas con precio de delivery/recojo de una sede concreta (San Borja). No es la carta " +
+      "de consumo en mesa de la red completa: los precios se publican con `disponibleEn: [\"san-borja\"]` y una " +
+      "nota explícita de que no están confirmados para el resto de locales ni para consumo en mesa. Revisado una " +
+      "segunda vez, específicamente buscando chilcanos y cócteles: el menú de Rappi no incluye ninguna bebida " +
+      "preparada, solo gaseosas, agua y cerveza embotellada (coherente con que el delivery no suele vender tragos).",
+  },
+  "mesa247-pideonline": {
+    nombre: "mesa 24/7 — pedidos en línea (longhorn.mesa247.pe/pideonline/610)",
+    url: "https://longhorn.mesa247.pe/pideonline/610",
+    consultadoEl: "2026-10-17",
+    confianza: "baja",
+    notas:
+      "Posible carta con precios reales de delivery, pero el sitio exige iniciar sesión (Facebook/Google/email) " +
+      "antes de mostrar un solo producto; no existe modo de invitado. No se creó ninguna cuenta para acceder " +
+      "— está fuera de lo que se puede hacer de forma autónoma. Ni longhorn.mesa247.pe/carta ni la portada de " +
+      "longhorn.mesa247.pe publican un menú visible sin iniciar sesión. Esta fuente queda registrada como " +
+      "intentada y bloqueada, no como consultada.",
+  },
+  "scribd-recetario-2018": {
+    nombre: "Recetario histórico de coctelería LongHorn (documento de terceros en Scribd)",
+    url: "https://es.scribd.com/document/467572562/RECETARIO-DE-CARTA-DE-TRAGOS-2018-Recetario-Longhorn",
+    consultadoEl: "2026-10-16",
+    fechaDocumento: "2018",
+    confianza: "baja",
+    notas:
+      "«Ficha técnica de coctelería»: 8 cócteles de autor y 6 pisco sours con receta completa (método, cristalería, " +
+      "ingredientes, decoración) en la vista previa gratuita; el resto del documento (chilcanos, cócteles clásicos) " +
+      "queda tras el muro de pago y no se ha podido verificar directamente, solo se contrasta con la lista que " +
+      "facilitó la clienta. La propia Scribd etiqueta el documento también como «Carta de Cócteles Longhorn 2024» " +
+      "en sus metadatos de SEO, lo cual NO se ha podido confirmar como una revisión real de 2024: se trata como un " +
+      "documento de 2018 de antigüedad y vigencia desconocidas. Ningún precio ni ingrediente de esta fuente se " +
+      "publica: solo nombres, como lista de borradores pendientes de aprobación (ver docs/bebidas-pendientes.md).",
+  },
 } as const;
 
 export type FuenteId = keyof typeof REGISTROS;

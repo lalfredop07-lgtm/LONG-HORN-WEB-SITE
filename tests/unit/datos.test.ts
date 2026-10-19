@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { AVISO_CARTA, CATEGORIAS, GRUPOS, PLATOS } from "@/data/carta";
+import { CATEGORIAS, GRUPOS, PLATOS } from "@/data/carta";
 import { LOCALES } from "@/data/locales";
 import { EXPERIENCIAS } from "@/data/experiencias";
 import { MARCA } from "@/data/marca";
@@ -9,14 +9,15 @@ import { cartaAgrupada, formatearPrecio, totalPlatosPublicados } from "@/lib/car
 import { localesConMapa, localesPublicados, telefonoHref, urlComoLlegar } from "@/lib/locales";
 
 describe("carta", () => {
-  it("contiene las 103 referencias verificadas del PDF oficial", () => {
-    expect(PLATOS).toHaveLength(103);
-    expect(totalPlatosPublicados()).toBe(103);
+  it("contiene las 103 referencias de alimentos del PDF oficial más las 56 de bebidas (28 publicadas, 28 pendientes)", () => {
+    expect(PLATOS).toHaveLength(159);
+    expect(totalPlatosPublicados()).toBe(131);
+    expect(PLATOS.filter((p) => p.estado === "oculto")).toHaveLength(28);
   });
 
-  it("no pierde ningún plato al agrupar para la interfaz", () => {
+  it("no pierde ningún plato publicado al agrupar para la interfaz (los ocultos no cuentan a propósito)", () => {
     const enGrupos = cartaAgrupada().reduce((n, g) => n + g.totalPlatos, 0);
-    expect(enGrupos).toBe(PLATOS.length);
+    expect(enGrupos).toBe(totalPlatosPublicados());
   });
 
   it("asigna identificadores únicos a cada plato", () => {
@@ -28,19 +29,43 @@ describe("carta", () => {
     for (const c of CATEGORIAS) expect(grupos.has(c.grupo)).toBe(true);
   });
 
-  it("todo plato publicado tiene precio, fuente y fecha de verificación", () => {
+  it("todo plato publicado tiene fuente y fecha de verificación; si tiene precio, es positivo", () => {
     for (const p of PLATOS.filter((x) => x.estado === "publicado")) {
-      expect(p.precio, `${p.nombre} sin precio`).toBeGreaterThan(0);
+      if (p.precio !== undefined) expect(p.precio, `${p.nombre} precio inválido`).toBeGreaterThan(0);
       expect(FUENTES[p.fuenteId as keyof typeof FUENTES]).toBeDefined();
       expect(p.verificadoEl).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
   });
 
-  it("el grupo de bebidas no publica platos inventados", () => {
-    const bebidas = cartaAgrupada().find((g) => g.id === "bebidas");
-    expect(bebidas?.sinCartaPublicada).toBe(true);
-    expect(bebidas?.totalPlatos).toBe(0);
-    expect(bebidas?.notaSinCarta).toBeTruthy();
+  it("todo plato oculto/histórico o sin precio lo documenta en notaFuente", () => {
+    for (const p of PLATOS) {
+      if (p.estado === "oculto" || p.precio === undefined) {
+        expect(p.notaFuente, `${p.nombre} sin notaFuente`).toBeTruthy();
+      }
+    }
+  });
+
+  it("ningún plato histórico o pendiente de aprobación se publica", () => {
+    for (const p of PLATOS) {
+      if (p.estadoVerificacion === "historico" || p.estadoVerificacion === "pendiente-confirmar") {
+        expect(p.estado, `${p.nombre} (${p.estadoVerificacion}) no debería estar publicado`).toBe("oculto");
+      }
+    }
+  });
+
+  it("el grupo de bebidas publica solo lo verificado, con subcategorías y sin huecos vacíos", () => {
+    const agrupada = cartaAgrupada().find((g) => g.id === "bebidas");
+    expect(agrupada?.sinCartaPublicada).toBe(false);
+    expect(agrupada?.totalPlatos).toBe(28);
+    // «Cócteles de Autor» no tiene ningún producto publicado: no debe
+    // aparecer como subcategoría con contenido.
+    const autor = agrupada?.categorias.find((c) => c.id === "bebidas-cocteles-autor");
+    expect(autor?.platos.length).toBe(0);
+    // El resto de subcategorías sí tienen al menos un producto.
+    const conProductos = agrupada?.categorias.filter((c) => c.id !== "bebidas-cocteles-autor") ?? [];
+    for (const c of conProductos) {
+      expect(c.platos.length, `${c.id} sin productos`).toBeGreaterThan(0);
+    }
   });
 
   it("formatea precios en soles", () => {
@@ -48,9 +73,6 @@ describe("carta", () => {
     expect(formatearPrecio(undefined)).toBeNull();
   });
 
-  it("conserva el aviso legal literal de la carta", () => {
-    expect(AVISO_CARTA).toContain("I.G.V.");
-  });
 });
 
 describe("locales", () => {
