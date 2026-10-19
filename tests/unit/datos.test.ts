@@ -6,7 +6,14 @@ import { EXPERIENCIAS } from "@/data/experiencias";
 import { MARCA } from "@/data/marca";
 import { FUENTES } from "@/data/fuentes";
 import { cartaAgrupada, formatearPrecio, totalPlatosPublicados } from "@/lib/carta";
-import { localesConMapa, localesPublicados, telefonoHref, urlComoLlegar } from "@/lib/locales";
+import {
+  googleMapsVerificado,
+  localesConMapa,
+  localesPublicados,
+  telefonoHref,
+  urlComoLlegar,
+  urlVerEnMapa,
+} from "@/lib/locales";
 
 describe("carta", () => {
   it("contiene las 103 referencias de alimentos del PDF oficial más las 56 de bebidas (28 publicadas, 28 pendientes)", () => {
@@ -106,6 +113,49 @@ describe("locales", () => {
     for (const l of localesPublicados()) {
       expect(urlComoLlegar(l)).toMatch(/^https:\/\/www\.google\.com\/maps\//);
     }
+  });
+
+  it("«Cómo llegar» y «Abrir en Google Maps» usan endpoints distintos de la API de URLs de Google Maps", () => {
+    for (const l of localesPublicados()) {
+      expect(urlComoLlegar(l)).toMatch(/^https:\/\/www\.google\.com\/maps\/dir\/\?api=1&destination=/);
+      expect(urlVerEnMapa(l)).toMatch(/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/);
+    }
+  });
+
+  it("nunca genera un enlace de Google Maps a partir de coordenadas sueltas (lat,lng): siempre nombre/dirección", () => {
+    for (const l of localesPublicados()) {
+      expect(urlComoLlegar(l)).not.toMatch(/destination=-?\d+\.\d+%2C-?\d+\.\d+/);
+      expect(urlVerEnMapa(l)).not.toMatch(/query=-?\d+\.\d+%2C-?\d+\.\d+/);
+    }
+  });
+
+  it("todo local con ficha de Google Maps verificada incluye destination_place_id/query_place_id, y ambos botones apuntan al mismo identificador", () => {
+    for (const l of localesPublicados()) {
+      if (!googleMapsVerificado(l)) continue;
+      const cid = encodeURIComponent(l.googleMapsCid!);
+      expect(urlComoLlegar(l)).toContain(`destination_place_id=${cid}`);
+      expect(urlVerEnMapa(l)).toContain(`query_place_id=${cid}`);
+    }
+  });
+
+  it("todo local sin ficha de Google Maps verificada lo deja explícito (sin inventar un identificador)", () => {
+    const sinVerificar = localesPublicados().filter((l) => !googleMapsVerificado(l));
+    for (const l of sinVerificar) {
+      expect(l.googleMapsCid).toBeNull();
+      expect(l.googleMapsNombre).toBeNull();
+      expect(l.notas, `${l.nombreCorto} sin ficha de Google Maps debería explicarlo en notas`).toMatch(
+        /pendiente|no se encontr/i,
+      );
+      expect(urlComoLlegar(l)).not.toContain("place_id");
+      expect(urlVerEnMapa(l)).not.toContain("place_id");
+    }
+  });
+
+  it("12 de los 13 locales tienen ficha de Google Maps verificada (Piura es el único pendiente)", () => {
+    const verificados = localesPublicados().filter(googleMapsVerificado);
+    const pendientes = localesPublicados().filter((l) => !googleMapsVerificado(l));
+    expect(verificados).toHaveLength(12);
+    expect(pendientes.map((l) => l.slug)).toEqual(["piura"]);
   });
 
   it("normaliza teléfonos a E.164", () => {

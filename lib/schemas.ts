@@ -208,6 +208,21 @@ export const localSchema = z.object({
   /** Se publica en el directorio y el sitemap. */
   publicado: z.boolean().default(true),
   notas: z.string().optional(),
+  /**
+   * Ficha de negocio de Google Maps de ESTE restaurante (no del centro
+   * comercial), identificada a mano abriendo Google Maps y confirmando el
+   * nombre, las reseñas y la dirección. `googleMapsCid` es el identificador
+   * `0x<feature>:0x<cid>` que la propia ficha pública expone en su URL —
+   * Google lo acepta como `destination_place_id`/`query_place_id` en sus
+   * URLs de navegación, igual que un Place ID de pago de la API de Places,
+   * pero se obtiene gratis desde la web normal. `null` cuando no se
+   * encontró una ficha propia verificable (ver `notas`): en ese caso el
+   * enlace cae a una búsqueda por nombre y dirección, nunca a un punto
+   * inventado.
+   */
+  googleMapsCid: z.string().nullable(),
+  /** Nombre + dirección exactos de la ficha de Google Maps verificada. */
+  googleMapsNombre: z.string().nullable(),
 });
 export type Local = z.infer<typeof localSchema>;
 

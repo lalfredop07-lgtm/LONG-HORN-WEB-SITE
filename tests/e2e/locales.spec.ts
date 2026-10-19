@@ -131,7 +131,9 @@ test.describe("Ficha de local", () => {
     expect(restaurante).toBeTruthy();
     expect(restaurante.name).toContain("San Isidro");
     expect(restaurante.address.streetAddress).toBe("Calle Los Libertadores 302");
-    expect(restaurante.geo.latitude).toBeCloseTo(-12.101014, 4);
+    // Coordenada corregida el 2026-10-19 contra la ficha de Google Maps
+    // verificada (antes: -12.101014, dato del JSON-LD interno de la marca).
+    expect(restaurante.geo.latitude).toBeCloseTo(-12.1011127, 4);
     expect(restaurante.acceptsReservations).toBe("True");
     // Nunca se inventan valoraciones.
     expect(restaurante.aggregateRating).toBeUndefined();

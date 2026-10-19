@@ -45,24 +45,54 @@ export function localesCercanos(slug: string, limite = 3): Local[] {
 }
 
 /**
- * Enlace «Cómo llegar». Con coordenadas verificadas apunta al punto exacto;
- * si no, a una búsqueda por nombre y dirección (nunca a un punto inventado).
+ * Texto de Google Maps para los dos botones externos: el nombre y la
+ * dirección EXACTOS que devuelve la ficha de negocio verificada
+ * (`googleMapsNombre`) cuando existe. Nunca unas coordenadas sueltas:
+ * `query=lat,lng` o `destination=lat,lng` hace que Google muestre el punto
+ * más cercano que tenga indexado, que en un centro comercial puede ser
+ * cualquier otro local — precisamente el bug que se reportó.
+ *
+ * Si no hay ficha verificada (ver `googleMapsVerificado` más abajo), se usa
+ * el nombre + centro comercial + distrito que ya teníamos: una búsqueda
+ * específica, nunca un punto inventado.
  */
-export function urlComoLlegar(local: Local): string {
-  if (local.coordenadas) {
-    const { lat, lng } = local.coordenadas;
-    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-  }
-  const consulta = encodeURIComponent(`${local.nombre}, ${local.direccion}, ${local.distrito}`);
-  return `https://www.google.com/maps/search/?api=1&query=${consulta}`;
+function textoGoogleMaps(local: Local): string {
+  if (local.googleMapsNombre) return local.googleMapsNombre;
+  return [local.nombre, local.centroComercial, local.distrito, local.ciudad]
+    .filter((parte): parte is string => Boolean(parte))
+    .join(", ");
 }
 
+/** `true` cuando el local tiene una ficha de Google Maps confirmada a mano. */
+export function googleMapsVerificado(local: Local): boolean {
+  return local.googleMapsCid !== null;
+}
+
+/**
+ * Enlace «Cómo llegar»: indicaciones de navegación.
+ *
+ * Con ficha verificada añade `destination_place_id`, el identificador que
+ * la propia ficha pública de Google Maps expone en su URL (formato
+ * `0x<feature>:0x<cid>`) — Google lo resuelve exactamente igual que un
+ * Place ID de la API de pago de Places, pero se obtiene gratis navegando la
+ * web normal. Sin ficha verificada, cae a una búsqueda por nombre y
+ * dirección (nunca a coordenadas sueltas ni a un identificador inventado).
+ */
+export function urlComoLlegar(local: Local): string {
+  const destino = encodeURIComponent(textoGoogleMaps(local));
+  const base = `https://www.google.com/maps/dir/?api=1&destination=${destino}`;
+  return local.googleMapsCid
+    ? `${base}&destination_place_id=${encodeURIComponent(local.googleMapsCid)}`
+    : base;
+}
+
+/** Enlace «Abrir en Google Maps»: la ficha comercial completa del local. */
 export function urlVerEnMapa(local: Local): string {
-  if (local.coordenadas) {
-    const { lat, lng } = local.coordenadas;
-    return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-  }
-  return urlComoLlegar(local);
+  const consulta = encodeURIComponent(textoGoogleMaps(local));
+  const base = `https://www.google.com/maps/search/?api=1&query=${consulta}`;
+  return local.googleMapsCid
+    ? `${base}&query_place_id=${encodeURIComponent(local.googleMapsCid)}`
+    : base;
 }
 
 /**

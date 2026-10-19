@@ -7,7 +7,7 @@ import { TarjetaLocal } from "@/components/locations/TarjetaLocal";
 import { Rojo } from "@/components/ui/Resaltado";
 import { MARCA } from "@/data/marca";
 import { LOCALES } from "@/data/locales";
-import { localPorSlug, localesCercanos, telefonoHref, urlComoLlegar } from "@/lib/locales";
+import { localPorSlug, localesCercanos, telefonoHref, urlComoLlegar, urlVerEnMapa } from "@/lib/locales";
 import { construirMetadata, jsonLdMigas } from "@/lib/seo";
 import { urlAbsoluta } from "@/lib/site";
 
@@ -226,7 +226,7 @@ export default async function PaginaLocal({ params }: Props) {
                   : "Buscaremos este local por su nombre y dirección en Google Maps."}
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
-                <BotonExterno href={urlComoLlegar(local)} variante="secundario">
+                <BotonExterno href={urlVerEnMapa(local)} variante="secundario">
                   Abrir en Google Maps
                 </BotonExterno>
                 <BotonEnlace href="/locales" variante="fantasma">
