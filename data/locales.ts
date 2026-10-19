@@ -223,7 +223,9 @@ const LOCALES_RAW: LocalRaw[] = [
     centroComercial: "C.C. Mega Plaza",
     direccion: "Av. Alfredo Mendiola Nro. 3698 - C.C. Mega Plaza",
     telefonos: ["01 4213916", "945 186 438"],
-    coordenadas: { lat: -11.9956091, lng: -77.0613347 },
+    // Coordenada corregida: el JSON-LD interno quedaba a ~85 m de la ficha
+    // de negocio real en Google Maps (CID 0x9105ce56bd3c0001:0x34abf67194f313a2).
+    coordenadas: { lat: -11.9949856, lng: -77.0617764 },
     horarios: null,
     urlReservas: "https://longhorn.mesa247.pe/reservas/longhorn_mega_plaza",
     urlPedidos: PEDIDOS,
@@ -232,9 +234,11 @@ const LOCALES_RAW: LocalRaw[] = [
     imagen: "/images/carta/portada-corte-parrilla.webp",
     imagenAlt: "Corte de res a la parrilla sobre tabla de madera",
     estadoVerificacion: "verificado",
-    fuenteIds: ["mesa247-reservas"],
+    fuenteIds: ["mesa247-reservas", "google-maps-ficha-negocio"],
     verificadoEl: VERIFICADO_EL,
-    notas: "El JSON-LD oficial no incluye código postal para este local.",
+    notas:
+      "El JSON-LD oficial no incluye código postal para este local. " +
+      "Coordenadas corregidas el 2026-10-19 (ver docs/locales-verificacion.md).",
   },
   {
     slug: "san-juan-de-lurigancho",
@@ -246,11 +250,13 @@ const LOCALES_RAW: LocalRaw[] = [
     centroComercial: "C.C. Mall Aventura San Juan de Lurigancho",
     direccion: "C.C. Mall Aventura San Juan de Lurigancho, 3.er nivel — Av. Lurigancho cdra. 9",
     telefonos: [],
-    // Coordenadas del centro comercial según OpenStreetMap (elemento de tipo
-    // «mall», Av. Lurigancho 997, Zárate), coherentes con la dirección
-    // documentada por Perú Retail. Señalan el edificio, no la unidad del
-    // 3.er nivel: suficiente para llegar, pendiente de afinar con el cliente.
-    coordenadas: { lat: -12.0162569, lng: -76.9992319 },
+    // Antes se usaba el centroide del centro comercial (OpenStreetMap), sin
+    // ficha propia del restaurante. El 2026-10-19 se encontró en Google Maps
+    // la ficha de negocio «LongHorn Grill & Drinks - San Juan» (68 reseñas,
+    // CID 0x9105c5073637556b:0xc30eff006eb82cd7), que cae a ~5 m del punto
+    // anterior: confirma la ubicación y sube la precisión al restaurante, no
+    // solo al edificio.
+    coordenadas: { lat: -12.0162345, lng: -76.9991907 },
     horarios: null,
     urlReservas: null,
     urlPedidos: PEDIDOS,
@@ -258,11 +264,14 @@ const LOCALES_RAW: LocalRaw[] = [
     imagen: "/images/carta/ensalada-quinua-longhorn.webp",
     imagenAlt: "Ensalada de quinua al estilo LongHorn",
     estadoVerificacion: "verificado-parcial",
-    fuenteIds: ["peru-retail-2024", "web-oficial", "openstreetmap"],
-    verificadoEl: "2026-10-15",
+    fuenteIds: ["peru-retail-2024", "web-oficial", "openstreetmap", "google-maps-ficha-negocio"],
+    verificadoEl: VERIFICADO_EL,
     servicios: ["Carta completa"],
     notas:
-      "Apertura documentada por Perú Retail (17-02-2024): 3.er nivel, 384,11 m². No figura en el selector de reservas de mesa 24/7, por lo que no tiene enlace de reserva propio. El punto del mapa corresponde al centro comercial (dato de OpenStreetMap), no a la unidad exacta dentro del mall.",
+      "Apertura documentada por Perú Retail (17-02-2024): 3.er nivel, 384,11 m². No figura en el selector de " +
+      "reservas de mesa 24/7, por lo que no tiene enlace de reserva propio. Sigue marcado «verificado-parcial» " +
+      "por la falta de teléfono y reserva propios, aunque desde el 2026-10-19 la coordenada del mapa corresponde " +
+      "a la ficha de negocio verificada del restaurante, no solo al centro comercial.",
   },
 
   /* --------------------------- PROVINCIAS ------------------------- */
@@ -276,7 +285,14 @@ const LOCALES_RAW: LocalRaw[] = [
     direccion: "Calle Miguel de Cervantes 300, int. 10, P.J. Diego Ferré",
     codigoPostal: "14008",
     telefonos: [],
-    coordenadas: { lat: -6.7782153, lng: -79.8511703 },
+    // ATENCIÓN — direcciones en conflicto (pendiente de confirmar con el
+    // cliente). El JSON-LD interno de mesa 24/7 da «Miguel de Cervantes 300,
+    // P.J. Diego Ferré», a ~2 km de la única ficha de negocio que Google
+    // Maps reconoce como «LongHorn Grill & Drinks - Chiclayo» (30 reseñas,
+    // CID 0x904cef0bcc82ba9d:0xd6cd30c76f3364a1), en Av. Andrés Avelino
+    // Cáceres 252. Se usa la coordenada de la ficha verificada para el botón
+    // «Cómo llegar»; `direccion` se conserva tal cual la publica la marca.
+    coordenadas: { lat: -6.7779543, lng: -79.8329257 },
     horarios: null,
     urlReservas: "https://longhorn.mesa247.pe/reservas/longhorn-chiclayo",
     urlPedidos: PEDIDOS,
@@ -285,10 +301,13 @@ const LOCALES_RAW: LocalRaw[] = [
     rangoPrecio: "S/ 89",
     imagen: "/images/carta/legumbres-a-la-parrilla.webp",
     imagenAlt: "Legumbres a la parrilla LongHorn",
-    estadoVerificacion: "verificado",
-    fuenteIds: ["mesa247-reservas"],
+    estadoVerificacion: "verificado-parcial",
+    fuenteIds: ["mesa247-reservas", "google-maps-ficha-negocio"],
     verificadoEl: VERIFICADO_EL,
-    notas: "El JSON-LD oficial no publica teléfono para este local.",
+    notas:
+      "El JSON-LD oficial no publica teléfono para este local. Dirección pendiente de confirmar: el sistema de " +
+      "reservas da «Miguel de Cervantes 300, P.J. Diego Ferré» pero la única ficha de Google Maps de LongHorn en " +
+      "Chiclayo está en «Av. Andrés Avelino Cáceres 252», a ~2 km. Se usan las coordenadas de la ficha verificada.",
   },
   {
     slug: "piura",
@@ -312,6 +331,10 @@ const LOCALES_RAW: LocalRaw[] = [
     estadoVerificacion: "verificado",
     fuenteIds: ["mesa247-reservas"],
     verificadoEl: VERIFICADO_EL,
+    notas:
+      "Pendiente de verificación adicional: a diferencia del resto de locales, el 2026-10-19 no se encontró en " +
+      "Google Maps ninguna ficha de negocio propia de «LongHorn Piura». El local sigue activo hoy en el sistema " +
+      "oficial de reservas, así que se conserva la coordenada del JSON-LD sin cambios.",
   },
   {
     slug: "cajamarca",
@@ -324,7 +347,9 @@ const LOCALES_RAW: LocalRaw[] = [
     direccion: "Av. Evitamiento Norte, lote 1A - C.C. Real Plaza",
     codigoPostal: "06002",
     telefonos: ["(076) 357 099", "943 618 128"],
-    coordenadas: { lat: -7.1545979, lng: -78.5051379 },
+    // Coordenada corregida: el JSON-LD interno quedaba a ~90 m de la ficha
+    // de negocio real en Google Maps (CID 0x91b25ae5a6884d61:0xd3c90972b376c922).
+    coordenadas: { lat: -7.1547068, lng: -78.5059364 },
     horarios: null,
     urlReservas: "https://longhorn.mesa247.pe/reservas/longhorn-cajamarca",
     urlPedidos: PEDIDOS,
@@ -334,8 +359,9 @@ const LOCALES_RAW: LocalRaw[] = [
     imagen: "/images/carta/parrilla-para-2.webp",
     imagenAlt: "Parrilla LongHorn para compartir",
     estadoVerificacion: "verificado",
-    fuenteIds: ["mesa247-reservas"],
+    fuenteIds: ["mesa247-reservas", "google-maps-ficha-negocio"],
     verificadoEl: VERIFICADO_EL,
+    notas: "Coordenadas corregidas el 2026-10-19 (ver docs/locales-verificacion.md).",
   },
   {
     slug: "huancayo",
@@ -347,7 +373,9 @@ const LOCALES_RAW: LocalRaw[] = [
     centroComercial: "C.C. Real Plaza Huancayo",
     direccion: "Av. Ferrocarril 1035 - C.C. Real Plaza",
     telefonos: ["(064) 397 006", "966 220 121"],
-    coordenadas: { lat: -12.0665891, lng: -75.2055955 },
+    // Coordenada corregida: el JSON-LD interno quedaba a ~55 m de la ficha
+    // de negocio real en Google Maps (CID 0x910e963a8be5aaab:0x3fc7dcad5e90f903).
+    coordenadas: { lat: -12.0668835, lng: -75.205146 },
     horarios: null,
     urlReservas: "https://longhorn.mesa247.pe/reservas/longhorn-huancayo",
     urlPedidos: PEDIDOS,
@@ -357,10 +385,11 @@ const LOCALES_RAW: LocalRaw[] = [
     imagen: "/images/carta/costillas-longhorn-bbq.webp",
     imagenAlt: "Costillas LongHorn en salsa BBQ",
     estadoVerificacion: "verificado",
-    fuenteIds: ["mesa247-reservas"],
+    fuenteIds: ["mesa247-reservas", "google-maps-ficha-negocio"],
     verificadoEl: VERIFICADO_EL,
     notas:
-      "El JSON-LD oficial indica por error localidad «Tarma». Las coordenadas publicadas (-12.0666, -75.2056) y la dirección corresponden a Huancayo, Junín; se ha corregido la localidad y se mantienen las coordenadas oficiales.",
+      "El JSON-LD oficial indica por error localidad «Tarma». La dirección corresponde a Huancayo, Junín; se ha " +
+      "corregido la localidad. Coordenadas corregidas el 2026-10-19 contra la ficha de negocio de Google Maps.",
   },
 ];
 
@@ -380,7 +409,12 @@ export const LOCALES_DESCARTADOS = [
   {
     nombre: "LongHorn Centro Cívico",
     motivo:
-      "Aparece en directorios de terceros (datos de usuarios) pero no en la web oficial, ni en el sistema de reservas, ni en el de pedidos. Publicarlo haría que el total superara los 13 locales que declara la marca. No se publica hasta confirmación del cliente.",
+      "No aparece en la web oficial, ni en el sistema de reservas, ni en el de pedidos. Reconsultado el " +
+      "2026-10-19: Google Maps tiene una ficha de negocio propia «LongHorn Grill & Drinks - Centro Civico» " +
+      "(4,1★, 823 reseñas, 322 fotos, CC Real Plaza, Av. Garcilaso de la Vega 1337, Lima, lat -12.0560946 / " +
+      "lng -77.0373028), coherente con varios directorios de terceros. Publicarlo llevaría el total a 14 y " +
+      "contradiría los «13 locales» que declara la marca. Pendiente de que el cliente confirme si es un 14.º " +
+      "local activo o sustituye a alguno de los 13 actuales.",
     fuenteIds: ["web-oficial", "mesa247-reservas"],
   },
 ] as const;

@@ -69,6 +69,18 @@ const REGISTROS = {
     notas:
       "Datos abiertos de OpenStreetMap. Se usa únicamente para situar el edificio de un centro comercial cuando la marca no publica coordenadas propias; nunca para inventar una sucursal.",
   },
+  "google-maps-ficha-negocio": {
+    nombre: "Google Maps — ficha de negocio verificada de cada local",
+    url: "https://www.google.com/maps",
+    consultadoEl: "2026-10-19",
+    confianza: "alta",
+    notas:
+      "Cada local se buscó por nombre + centro comercial/dirección. Solo se tomaron coordenadas cuando Google " +
+      "Maps resolvió una única ficha de negocio con reseñas y fotos reales (no una coincidencia aproximada ni el " +
+      "centro comercial genérico). Sustituye, cuando difiere, a la coordenada del JSON-LD interno de la marca: en " +
+      "varios locales dentro de centros comerciales esa coordenada interna no correspondía a ningún lugar que " +
+      "Google reconociera como el restaurante (ver docs/locales-verificacion.md).",
+  },
   "logo-cliente": {
     nombre: "Logotipo oficial entregado por el cliente (LOGO.png)",
     consultadoEl: "2026-10-14",
