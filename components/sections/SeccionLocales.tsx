@@ -17,7 +17,13 @@ export function SeccionLocales() {
       aria-labelledby="titulo-locales"
       className="relative overflow-hidden bg-lh-madera-900 py-seccion"
     >
-      <div className="contenedor-ancho">
+      {/* Costura superior: funde el corte duro con la sección anterior */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-lh-carbon/40 to-transparent sm:h-28"
+      />
+
+      <div className="contenedor-ancho relative">
         <Revelar className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-xl">
             <p className="eyebrow mb-4 text-lh-ambar-claro">Nuestros locales</p>

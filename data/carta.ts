@@ -35,12 +35,14 @@ export const NOTA_MENU_KIDS =
  * Grupos de navegación
  * ------------------------------------------------------------------ */
 
+// Orden de pestañas pedido explícitamente por el cliente: Piqueos, Cortes,
+// Parrillas y Pastas primero (en ese orden), el resto después.
 const GRUPOS_RAW = [
   { id: "piqueos", nombre: "Piqueos", nombreCorto: "Piqueos", orden: 0, sinCartaPublicada: false, descripcion: "El inicio perfecto: chorizos, tequeños, anticuchos y piqueos para compartir." },
-  { id: "ensaladas", nombre: "Ensaladas", nombreCorto: "Ensaladas", orden: 1, sinCartaPublicada: false, descripcion: "Frescas, generosas y pensadas también para quien busca algo ligero." },
-  { id: "pastas", nombre: "Pastas", nombreCorto: "Pastas", orden: 2, sinCartaPublicada: false, descripcion: "Pasta fresca, raviolis rellenos y salsas de siempre." },
-  { id: "grill", nombre: "Grill LongHorn", nombreCorto: "Cortes", orden: 3, sinCartaPublicada: false, descripcion: "Nuestros cortes: americanos premium, argentinos, selectos y los clásicos de la casa." },
-  { id: "mas-del-grill", nombre: "Más del Grill", nombreCorto: "Parrillas", orden: 4, sinCartaPublicada: false, descripcion: "Parrillas para compartir, cerdo, pollo y hamburguesas a la brasa." },
+  { id: "grill", nombre: "Grill LongHorn", nombreCorto: "Cortes", orden: 1, sinCartaPublicada: false, descripcion: "Nuestros cortes: americanos premium, argentinos, selectos y los clásicos de la casa." },
+  { id: "mas-del-grill", nombre: "Más del Grill", nombreCorto: "Parrillas", orden: 2, sinCartaPublicada: false, descripcion: "Parrillas para compartir, cerdo, pollo y hamburguesas a la brasa." },
+  { id: "pastas", nombre: "Pastas", nombreCorto: "Pastas", orden: 3, sinCartaPublicada: false, descripcion: "Pasta fresca, raviolis rellenos y salsas de siempre." },
+  { id: "ensaladas", nombre: "Ensaladas", nombreCorto: "Ensaladas", orden: 4, sinCartaPublicada: false, descripcion: "Frescas, generosas y pensadas también para quien busca algo ligero." },
   { id: "especialidades", nombre: "Especialidades", nombreCorto: "Especialidades", orden: 5, sinCartaPublicada: false, descripcion: "Las recetas que nos hicieron conocidos, saltados y combinaciones de carne y pasta." },
   { id: "guarniciones", nombre: "Guarniciones", nombreCorto: "Guarniciones", orden: 6, sinCartaPublicada: false },
   { id: "menu-kids", nombre: "Menú Kids", nombreCorto: "Kids", orden: 7, sinCartaPublicada: false, descripcion: NOTA_MENU_KIDS },

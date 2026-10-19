@@ -18,7 +18,13 @@ export function SeccionBebidas() {
       aria-labelledby="titulo-bebidas"
       className="relative overflow-hidden bg-lh-madera-800 py-seccion"
     >
-      <div className="contenedor-ancho">
+      {/* Costura superior: funde el corte duro con la sección anterior */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-lh-carbon/40 to-transparent sm:h-28"
+      />
+
+      <div className="contenedor-ancho relative">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] lg:gap-16">
           <Revelar desde="izquierda">
             <figure className="relative mx-auto aspect-[3/4] w-full max-w-md overflow-hidden rounded-lh-md shadow-lh-lg">

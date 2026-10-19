@@ -71,6 +71,11 @@ export function SeccionCortes() {
       aria-labelledby="titulo-cortes"
       className="relative overflow-hidden bg-lh-madera-900 py-seccion"
     >
+      {/* Costura superior: funde el corte duro con la sección anterior */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-lh-carbon/40 to-transparent sm:h-28"
+      />
       {/* Brasa tenue: el fuego reaparece aquí, sin invadir */}
       <div
         aria-hidden="true"
